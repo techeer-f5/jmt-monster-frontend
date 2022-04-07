@@ -17,6 +17,13 @@
     "quotes": [
       "error",
       "double"
+    ],
+    "react/function-component-definition": [
+      "error",
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
     ]
   },
   "parserOptions": {
