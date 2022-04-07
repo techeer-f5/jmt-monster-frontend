@@ -1,4 +1,6 @@
 ## 맛집 몬스터 프론트엔드
+프론트엔드 | [백엔드](https://github.com/techeer-f5/jmt-monster-backend)
+
 - 친구끼리 공유하는 수집형 맛집 어플리케이션
 - [기획 및 기술 선정 Notion 페이지](https://litsynp.notion.site/7a3cbfc9e2724a8d9520757e2da254bd)
 
