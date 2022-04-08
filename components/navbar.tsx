@@ -1,5 +1,3 @@
-const Navbar = ({ className }: { className?: string }) => {
-    return <div className={className} />;
-};
+import Navbar from './empty-div';
 
 export default Navbar;

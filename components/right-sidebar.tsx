@@ -1,5 +1,3 @@
-const RightSidebar = ({ className }: { className?: string }) => {
-    return <div className={className} />;
-};
+import RightSidebar from './empty-div';
 
 export default RightSidebar;

@@ -1,5 +1,3 @@
-const Header = ({ className }: { className?: string }) => {
-    return <div className={className ?? ''} />;
-};
+import Header from './empty-div';
 
 export default Header;
