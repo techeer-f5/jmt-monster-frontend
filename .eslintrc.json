@@ -1,4 +1,5 @@
 {
+  "parser": "@typescript-eslint/parser",
   "extends": [
     "next/core-web-vitals",
     "eslint:recommended",
@@ -8,6 +9,9 @@
     "plugin:react/recommended",
     "plugin:import/typescript",
     "plugin:prettier/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint"
   ],
   "rules": {
     "semi": [
@@ -29,7 +33,46 @@
     "react/react-in-jsx-scope": "off",
     "react/jsx-no-useless-fragment": "off"
   },
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  }
+  "overrides": [
+    {
+      "files": [
+        "**/*.test.js",
+        "**/*.test.ts"
+      ],
+      "env": {
+        "jest/globals": true
+      },
+      "plugins": [
+        "jest"
+      ],
+      "extends": [
+        "plugin:jest/recommended"
+      ],
+      "rules": {
+        "jest/no-export": "off"
+      }
+    },
+    {
+      // Original code from https://stackoverflow.com/a/64488474/11853111
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
+      // Your TypeScript files extension
+
+      // As mentioned in the comments, you should extend TypeScript plugins here,
+      // instead of extending them outside the `overrides`.
+      // If you don't want to extend any rules, you don't need an `extends` attribute.
+      "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+      ],
+      "parserOptions": {
+        "project": [
+          "./tsconfig.json"
+        ]
+        // Specify it only for TypeScript files
+      }
+    }
+  ]
 }
