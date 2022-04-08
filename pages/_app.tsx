@@ -1,5 +1,4 @@
 import type { AppProps } from "next/app";
-import React from "react";
 import Layout from "../components/layout";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
