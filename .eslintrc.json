@@ -4,20 +4,16 @@
     "eslint:recommended",
     "airbnb",
     "airbnb-typescript",
-    "prettier",
     "plugin:react/recommended",
     "plugin:import/typescript",
     "plugin:prettier/recommended"
   ],
   "rules": {
-    "semi": [
-      "error",
-      "always"
-    ],
-    "quotes": [
-      "error",
-      "double"
-    ],
+    "prettier/prettier": "error",
+    // It resolves prettier plugin conflicts.
+    "semi": "off",
+    "quotes": "off",
+    "indent": "off",
     "react/function-component-definition": [
       "error",
       {
