@@ -1,5 +1,5 @@
-const Navbar = () => {
-    return <></>;
+const Navbar = ({ className }: { className?: string }) => {
+    return <div className={className} />;
 };
 
 export default Navbar;
