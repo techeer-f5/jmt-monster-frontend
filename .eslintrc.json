@@ -5,7 +5,6 @@
     "eslint:recommended",
     "airbnb",
     "airbnb-typescript",
-    "prettier",
     "plugin:react/recommended",
     "plugin:import/typescript",
     "plugin:prettier/recommended"
@@ -14,14 +13,11 @@
     "@typescript-eslint"
   ],
   "rules": {
-    "semi": [
-      "error",
-      "always"
-    ],
-    "quotes": [
-      "error",
-      "double"
-    ],
+    "prettier/prettier": "error",
+    // It resolves prettier plugin conflicts.
+    "semi": "off",
+    "quotes": "off",
+    "indent": "off",
     "react/function-component-definition": [
       "error",
       {
@@ -31,7 +27,9 @@
     ],
     "react/jsx-props-no-spreading": "off",
     "react/react-in-jsx-scope": "off",
-    "react/jsx-no-useless-fragment": "off"
+    "react/jsx-no-useless-fragment": "off",
+    "react/require-default-props": "off",
+    "import/no-cycle": "off"
   },
   "overrides": [
     {

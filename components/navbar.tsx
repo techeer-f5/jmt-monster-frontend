@@ -1,5 +1,3 @@
-const Navbar = () => {
-  return <></>;
-};
+import Navbar from './empty-div';
 
 export default Navbar;
