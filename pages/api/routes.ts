@@ -5,8 +5,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 export type RouterDatum = {
     uri: string;
     name: string;
-    description?: string;
-    category?: string;
 };
 
 export type RouterData = RouterDatum[];
