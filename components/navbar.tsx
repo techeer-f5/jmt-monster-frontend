@@ -33,14 +33,14 @@ const Navbar = () => {
         return routes.map((route, idx) => (
             <Link
                 key={route.uri}
-                className={`flex flex-1 flex-grow border-gray-600 ${
+                className={`flex flex-1 flex-grow no-underline hover:no-underline border-gray-600 ${
                     idx > 0 ? 'border-l-2 ' : ' '
                 }${idx < routes.length - 1 ? 'border-r-2' : ' '}`}
                 href={route.uri}
             >
                 <div className="flex flex-1 flex-grow">
                     <div
-                        className={`mx-auto my-auto text-lg ${
+                        className={`mx-auto my-auto text-xl ${
                             route.uri === path ? 'text-[93C5FD]' : 'text-white'
                         }`}
                     >
