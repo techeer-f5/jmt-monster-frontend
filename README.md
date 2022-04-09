@@ -3,6 +3,7 @@
 
 - 친구끼리 공유하는 수집형 맛집 어플리케이션
 - [기획 및 기술 선정 Notion 페이지](https://litsynp.notion.site/7a3cbfc9e2724a8d9520757e2da254bd)
+- [Figma UI 디자인 페이지](https://www.figma.com/file/yVVsXwdnC2YO5CGBB4WmrI/%EB%A7%9B%EC%A7%91-%EB%AA%AC%EC%8A%A4%ED%84%B0-UI-%EB%94%94%EC%9E%90%EC%9D%B8?node-id=4213%3A1335)
 
 ## 🛠 Work in Progress
 
