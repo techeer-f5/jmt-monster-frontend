@@ -15,27 +15,27 @@ export default function getRoutes(
 ) {
     res.status(200).json([
         {
-            uri: 'maps/mine',
+            uri: '/maps/mine',
             name: '내 지도'
         },
         {
-            uri: 'maps/friends',
+            uri: '/maps/friends',
             name: '친구 지도'
         },
         {
-            uri: 'maps',
+            uri: '/maps',
             name: '지도 목록'
         },
         {
-            uri: 'friends/management',
+            uri: '/friends/management',
             name: '친구 관리'
         },
         {
-            uri: 'profile',
+            uri: '/profile',
             name: '프로필'
         },
         {
-            uri: 'settings',
+            uri: '/settings',
             name: '설정'
         }
     ]);
