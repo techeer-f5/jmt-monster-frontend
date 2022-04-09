@@ -6,7 +6,7 @@ const Index: NextPage = () => {
     const router = useRouter();
 
     useEffect(() => {
-        router.push('maps');
+        router.push('/maps/mine');
     }, []);
 
     return <></>;
