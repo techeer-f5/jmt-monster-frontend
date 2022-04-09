@@ -29,7 +29,9 @@
     "react/react-in-jsx-scope": "off",
     "react/jsx-no-useless-fragment": "off",
     "react/require-default-props": "off",
-    "import/no-cycle": "off"
+    "import/no-cycle": "off",
+    "react/no-unused-prop-types": "off",
+    "@typescript-eslint/no-floating-promises": "off"
   },
   "overrides": [
     {
