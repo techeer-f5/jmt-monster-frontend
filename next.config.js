@@ -1,6 +1,9 @@
-/** @type {import('next').NextConfig} */
+/** @type {import("next").NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-}
+    reactStrictMode: true,
+    options: {
+        sourcemaps: "development" // possible values can be production, development, or none
+    }
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

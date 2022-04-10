@@ -1,7 +1,8 @@
 import useSWR from 'swr';
-import { ReactNode, useCallback, useMemo } from 'react';
+import { createElement, ReactNode, useCallback, useMemo } from 'react';
 import { Link } from '@mui/material';
 import { useRouter } from 'next/router';
+import * as MuiIcons from '@mui/icons-material';
 import { RouterData } from '../pages/api/routes';
 
 const fetcher = async (url: string): Promise<RouterData> => {
@@ -30,25 +31,40 @@ const Navbar = () => {
         if (!routes) {
             return [];
         }
-        return routes.map((route, idx) => (
-            <Link
-                key={route.uri}
-                className={`flex flex-1 flex-grow no-underline hover:no-underline border-gray-600 ${
-                    idx > 0 ? 'border-l-[1px] ' : ' '
-                }${idx < routes.length - 1 ? 'border-r-[1px]' : ' '}`}
-                href={route.uri}
-            >
-                <div className="flex flex-1 flex-grow">
+        return routes.map((route, idx) => {
+            const { uri, name, icon } = route;
+
+            return (
+                <Link
+                    key={uri}
+                    className={`flex flex-1 flex-grow no-underline hover:no-underline border-gray-600 ${
+                        idx > 0 ? 'border-l-[0.1vw] ' : ' '
+                    }${idx < routes.length - 1 ? 'border-r-[0.1vw]' : ' '}`}
+                    href={uri}
+                >
                     <div
-                        className={`mx-auto my-auto text-lg ${
-                            route.uri === path ? 'text-[93C5FD]' : 'text-white'
+                        className={`flex flex-1 flex-col flex-grow text-lg ${
+                            uri === path ? 'text-[93C5FD]' : 'text-white'
                         }`}
                     >
-                        {route.name}
+                        {icon && (
+                            <div className="mx-auto mt-auto mb-0 flex flex-1 text-xl flex-grow">
+                                {createElement(MuiIcons[icon], {
+                                    className: 'flex-1 my-auto mx-auto'
+                                })}
+                            </div>
+                        )}
+                        <div
+                            className={`mx-auto mb-auto ${
+                                icon ? 'mt-0' : 'mt-auto'
+                            }`}
+                        >
+                            {route.name}
+                        </div>
                     </div>
-                </div>
-            </Link>
-        ));
+                </Link>
+            );
+        });
     }, [routes, path]);
 
     if (error) {
