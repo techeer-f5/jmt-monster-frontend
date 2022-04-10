@@ -1,10 +1,15 @@
 import type { NextPage } from 'next';
-import { Typography } from '@mui/material';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
-const Index: NextPage = () => (
-    <Typography variant="h1" className="text-white">
-        Hello, JMT Monster!
-    </Typography>
-);
+const Index: NextPage = () => {
+    const router = useRouter();
+
+    useEffect(() => {
+        router.push('/maps/mine');
+    }, []);
+
+    return <></>;
+};
 
 export default Index;
