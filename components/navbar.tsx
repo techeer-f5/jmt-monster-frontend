@@ -40,7 +40,7 @@ const Navbar = () => {
             >
                 <div className="flex flex-1 flex-grow">
                     <div
-                        className={`mx-auto my-auto text-xl ${
+                        className={`mx-auto my-auto text-lg ${
                             route.uri === path ? 'text-[93C5FD]' : 'text-white'
                         }`}
                     >
