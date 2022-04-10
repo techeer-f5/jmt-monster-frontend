@@ -31,40 +31,46 @@ const Navbar = () => {
         if (!routes) {
             return [];
         }
-        return routes.map((route, idx) => {
-            const { uri, name, icon } = route;
+        return routes
+            .map((route, idx) => {
+                const { uri, name, icon, visible } = route;
 
-            return (
-                <Link
-                    key={uri}
-                    className={`flex flex-1 flex-grow no-underline hover:no-underline border-gray-600 ${
-                        idx > 0 ? 'border-l-[0.1vw] ' : ' '
-                    }${idx < routes.length - 1 ? 'border-r-[0.1vw]' : ' '}`}
-                    href={uri}
-                >
-                    <div
-                        className={`flex flex-1 flex-col flex-grow text-lg ${
-                            uri === path ? 'text-[93C5FD]' : 'text-white'
-                        }`}
+                if (visible === false) {
+                    return null;
+                }
+
+                return (
+                    <Link
+                        key={uri}
+                        className={`flex flex-1 flex-grow no-underline hover:no-underline border-gray-600 ${
+                            idx > 0 ? 'border-l-[0.1vw] ' : ' '
+                        }${idx < routes.length - 1 ? 'border-r-[0.1vw]' : ' '}`}
+                        href={uri}
                     >
-                        {icon && (
-                            <div className="mx-auto mt-auto mb-0 flex flex-1 text-xl flex-grow">
-                                {createElement(MuiIcons[icon], {
-                                    className: 'flex-1 my-auto mx-auto'
-                                })}
-                            </div>
-                        )}
                         <div
-                            className={`mx-auto mb-auto ${
-                                icon ? 'mt-0' : 'mt-auto'
+                            className={`flex flex-1 flex-col flex-grow text-lg ${
+                                uri === path ? 'text-[93C5FD]' : 'text-white'
                             }`}
                         >
-                            {route.name}
+                            {icon && (
+                                <div className="mx-auto mt-auto mb-0 flex flex-1 text-xl flex-grow">
+                                    {createElement(MuiIcons[icon], {
+                                        className: 'flex-1 my-auto mx-auto'
+                                    })}
+                                </div>
+                            )}
+                            <div
+                                className={`mx-auto mb-auto ${
+                                    icon ? 'mt-0' : 'mt-auto'
+                                }`}
+                            >
+                                {route.name}
+                            </div>
                         </div>
-                    </div>
-                </Link>
-            );
-        });
+                    </Link>
+                );
+            })
+            .filter((e) => e);
     }, [routes, path]);
 
     if (error) {
