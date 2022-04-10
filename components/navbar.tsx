@@ -49,7 +49,7 @@ const Navbar = () => {
                 </div>
             </Link>
         ));
-    }, [routes]);
+    }, [routes, path]);
 
     if (error) {
         return (
