@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { createElement, ReactNode, useCallback, useMemo } from 'react';
-import { Link } from '@mui/material';
+import { CircularProgress, Link } from '@mui/material';
 import { useRouter } from 'next/router';
 import * as MuiIcons from '@mui/icons-material';
 import { RouterData } from '../pages/api/routes';
@@ -78,7 +78,14 @@ const Navbar = () => {
     if (!routes) {
         return (
             <RootNavbar>
-                <div>API 로딩에 실패했습니다.</div>
+                <div className="flex flex-1 flex-grow">
+                    <CircularProgress
+                        className="white mx-auto my-auto"
+                        sx={{
+                            color: 'white'
+                        }}
+                    />
+                </div>
             </RootNavbar>
         );
     }
