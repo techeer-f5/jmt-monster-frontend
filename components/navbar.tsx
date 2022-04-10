@@ -34,8 +34,8 @@ const Navbar = () => {
             <Link
                 key={route.uri}
                 className={`flex flex-1 flex-grow no-underline hover:no-underline border-gray-600 ${
-                    idx > 0 ? 'border-l-2 ' : ' '
-                }${idx < routes.length - 1 ? 'border-r-2' : ' '}`}
+                    idx > 0 ? 'border-l-[1px] ' : ' '
+                }${idx < routes.length - 1 ? 'border-r-[1px]' : ' '}`}
                 href={route.uri}
             >
                 <div className="flex flex-1 flex-grow">
