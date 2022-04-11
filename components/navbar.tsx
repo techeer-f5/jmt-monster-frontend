@@ -48,19 +48,20 @@ const Navbar = () => {
                         href={uri}
                     >
                         <div
-                            className={`flex flex-1 flex-col flex-grow text-lg ${
+                            className={`flex flex-1 flex-col flex-grow ${
                                 uri === path ? 'text-[93C5FD]' : 'text-white'
                             }`}
                         >
                             {icon && (
-                                <div className="mx-auto mt-auto mb-0 flex flex-1 text-xl flex-grow">
+                                <div className="mx-auto mt-auto mb-0 flex flex-1 flex-grow">
                                     {createElement(MuiIcons[icon], {
-                                        className: 'flex-1 my-auto mx-auto'
+                                        className:
+                                            'flex-1 my-auto mx-auto text-3xl md:text-4xl lg:text-5xl'
                                     })}
                                 </div>
                             )}
                             <div
-                                className={`mx-auto mb-auto ${
+                                className={`mx-auto mb-auto text-base md:text-lg lg:text-xl ${
                                     icon ? 'mt-0' : 'mt-auto'
                                 }`}
                             >

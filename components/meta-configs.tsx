@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { KAKAO_WEB_API_KEY } from '../utils/kakao';
 
 const MetaConfigs = () => {
     return (
@@ -89,6 +90,14 @@ const MetaConfigs = () => {
                 content="/icons/ms-icon-144x144.png"
             />
             <meta name="theme-color" content="#ffffff" />
+
+            {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+            <script src="https://developers.kakao.com/sdk/js/kakao.js" />
+            {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+            <script
+                type="text/javascript"
+                src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_WEB_API_KEY}`}
+            />
         </Head>
     );
 };
