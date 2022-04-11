@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import useMapHeader from '../store/map';
+import useMapHeader from '../store/map-header';
 
 const Header = () => {
     const { title, location } = useMapHeader();

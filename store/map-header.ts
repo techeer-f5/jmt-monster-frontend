@@ -8,7 +8,7 @@ export interface TitleState {
 }
 
 export const defaultTitle = '내 지도';
-export const defaultLocation = '서울특별시 종로구';
+export const defaultLocation = '서울특별시 강남구';
 
 const useMapHeader = create<TitleState>((set) => ({
     title: defaultTitle,
