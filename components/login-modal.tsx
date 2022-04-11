@@ -88,6 +88,8 @@ const LoginModal = () => {
         );
 
         setExtraInfosSubmitted(true);
+
+        // TODO: Integrate with OAuth 2.0
     };
 
     const onKeyPress: KeyboardEventHandler<HTMLDivElement> = (event) => {
