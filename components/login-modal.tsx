@@ -127,10 +127,10 @@ const LoginModal = () => {
                 disableEscapeKeyDown
                 open
             >
-                <Paper className="h-[50vh] w-[20vw] mx-auto my-auto bg-white flex flex-col flex-shrink py-[17.5vh]">
+                <Paper className="h-[65vh] w-[20vw] mx-auto my-auto bg-white flex flex-col flex-shrink py-[17.5vh]">
                     <div className="flex flex-shrink flex-1 flex-col">
-                        <div className="text-xl font-bold text-indigo-500 text-center mb-10">
-                            사용자 정보를 입력해 주세요!
+                        <div className="text-3xl font-bold text-indigo-700 text-center mb-10">
+                            사용자 정보 입력
                         </div>
                         <div className="flex flex-col mb-5 space-y-4">
                             <TextField
@@ -190,11 +190,12 @@ const LoginModal = () => {
             onClick: performGoogleSignIn
         }
     ].map((elem) => (
+        // FIXME: google sign in image to korean
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events
         <img
             key={elem.image}
             src={elem.image}
-            className="hover:cursor-pointer w-[15vw] mx-auto my-auto"
+            className="hover:cursor-pointer w-[10vw] mx-auto my-auto"
             onClick={elem.onClick}
             alt="login button"
         />
@@ -208,8 +209,18 @@ const LoginModal = () => {
             disableEscapeKeyDown
             open
         >
-            <Paper className="h-[50vh] w-[20vw] mx-auto my-auto bg-white flex flex-col flex-shrink py-[17.5vh]">
-                <div className="flex flex-shrink flex-1 flex-col">{images}</div>
+            <Paper className="h-[65vh] w-[20vw] mx-auto my-auto bg-white flex flex-col flex-shrink py-[17.5vh]">
+                <div className="flex flex-shrink flex-1 flex-col">
+                    <div>
+                        <div className="text-5xl font-extrabold text-center text-[#ff0000] text-opacity-50 text-red-border mb-3">
+                            맛집 몬스터
+                        </div>
+                        <div className="text-3xl font-bold text-center text-[#252525] mb-8">
+                            친구들과 만들어가는 맛집 지도
+                        </div>
+                    </div>
+                    <div className="my-auto">{images}</div>
+                </div>
             </Paper>
         </Dialog>
     );
