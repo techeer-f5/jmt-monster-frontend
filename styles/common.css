@@ -5,3 +5,7 @@
 .center-children > * {
     margin: auto;
 }
+
+.text-black-border {
+    -webkit-text-stroke: 0.035em black;
+}
