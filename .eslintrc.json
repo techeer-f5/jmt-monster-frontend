@@ -31,7 +31,8 @@
     "react/require-default-props": "off",
     "import/no-cycle": "off",
     "react/no-unused-prop-types": "off",
-    "@typescript-eslint/no-floating-promises": "off"
+    "@typescript-eslint/no-floating-promises": "off",
+    "no-console": "off"
   },
   "overrides": [
     {
