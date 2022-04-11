@@ -9,7 +9,7 @@ const googleLoginImage = '/images/google-login-btn.png';
 const kakaoLoginImage = '/images/kakao-login-btn.png';
 
 interface ExtraUserInfos {
-    email: string;
+    nickname: string;
     address: string;
 }
 
@@ -64,19 +64,19 @@ const LoginModal = () => {
     };
 
     const [extraUserInfos, setExtraUserInfos] = useState<ExtraUserInfos>({
-        email: '',
+        nickname: '',
         address: ''
     });
 
     const [daumPostCodeStatus, setDaumPostCodeStatus] = useState(false);
 
     const submit = () => {
-        const { email, address } = extraUserInfos;
+        const { nickname, address } = extraUserInfos;
 
-        if (!email || !address) {
+        if (!nickname || !address) {
             setSnackbarMessage(
                 'error',
-                '이메일 혹은 주소가 입력되지 않았습니다.'
+                '닉네임 혹은 주소가 입력되지 않았습니다.'
             );
 
             return;
@@ -135,9 +135,8 @@ const LoginModal = () => {
                         <div className="flex flex-col mb-5 space-y-4">
                             <TextField
                                 className="mx-auto w-[10vw]"
-                                id="email"
-                                type="email"
-                                label="이메일"
+                                id="nickname"
+                                label="닉네임"
                                 variant="standard"
                                 autoComplete="off"
                                 onKeyPress={onKeyPress}
@@ -145,7 +144,7 @@ const LoginModal = () => {
                                     setExtraUserInfos({
                                         ...extraUserInfos,
                                         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
-                                        email: event.target.value
+                                        nickname: event.target.value
                                     })
                                 }
                             />
