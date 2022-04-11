@@ -13,7 +13,7 @@ const useCurrentLatLng = create<LatLngState>((set) => ({
     lng: null,
     zoomLevel: 8,
     changeLatLng: (lat: number, lng: number) => set({ lat, lng }),
-    changeZoomLevel: (zoomLevel) => set({ zoomLevel })
+    changeZoomLevel: (zoomLevel: number) => set({ zoomLevel })
 }));
 
 export default useCurrentLatLng;
