@@ -19,6 +19,7 @@
     "next": "12.1.4",
     "next-pwa": "^5.5.0",
     "react": "18.0.0",
+    "react-daum-postcode": "^3.0.1",
     "react-dom": "18.0.0",
     "swr": "^1.2.2",
     "zustand": "^3.7.1"

@@ -1,15 +1,19 @@
 import create from 'zustand';
+import { AlertColor } from '@mui/material';
 
 export interface SnackbarStatus {
     message: string;
-    setMessage: (message: string) => void;
+    severity: AlertColor;
+    setMessage: (severity: AlertColor, message: string) => void;
     flush: () => void;
 }
 
 const useSnackbarHandler = create<SnackbarStatus>((set) => ({
     message: '',
-    setMessage: (message: string) => set({ message }),
-    flush: () => set({ message: '' })
+    severity: 'info',
+    setMessage: (severity: AlertColor, message: string) =>
+        set({ severity, message }),
+    flush: () => set({ severity: 'info', message: '' })
 }));
 
 export default useSnackbarHandler;

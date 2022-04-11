@@ -5989,6 +5989,7 @@ __metadata:
     postcss: ^8.4.12
     prettier: ^2.6.2
     react: 18.0.0
+    react-daum-postcode: ^3.0.1
     react-dom: 18.0.0
     swr: ^1.2.2
     tailwindcss: ^3.0.23
@@ -7281,6 +7282,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-daum-postcode@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "react-daum-postcode@npm:3.0.1"
+  dependencies:
+    prop-types: ^15.7.2
+    react: ^17.0.2
+  checksum: 05366e7fb0722a8f3a80b2b3c012ec84ceffa4d4aea9ee718663726219463cc2894d83ac194b7fab8177a15f267ee4d1503099071dc5c8ae2b053a6e3df05cad
+  languageName: node
+  linkType: hard
+
 "react-dom@npm:18.0.0":
   version: 18.0.0
   resolution: "react-dom@npm:18.0.0"
@@ -7328,6 +7339,16 @@ __metadata:
   dependencies:
     loose-envify: ^1.1.0
   checksum: 293020b96536b3c7113ee57ca5c990a3f25649d1751b1c7a3aabd16dff0691fe9f1eed1206616d0906d05933536052037340a0c8d0941ff870b0eb469a2f975b
+  languageName: node
+  linkType: hard
+
+"react@npm:^17.0.2":
+  version: 17.0.2
+  resolution: "react@npm:17.0.2"
+  dependencies:
+    loose-envify: ^1.1.0
+    object-assign: ^4.1.1
+  checksum: b254cc17ce3011788330f7bbf383ab653c6848902d7936a87b09d835d091e3f295f7e9dd1597c6daac5dc80f90e778c8230218ba8ad599f74adcc11e33b9d61b
   languageName: node
   linkType: hard
 
