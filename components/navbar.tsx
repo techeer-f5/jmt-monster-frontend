@@ -48,7 +48,7 @@ const Navbar = () => {
                         href={uri}
                     >
                         <div
-                            className={`flex flex-1 flex-col flex-grow text-lg ${
+                            className={`flex flex-1 flex-col flex-grow text-base md:text-lg lg:text-xl ${
                                 uri === path ? 'text-[93C5FD]' : 'text-white'
                             }`}
                         >
