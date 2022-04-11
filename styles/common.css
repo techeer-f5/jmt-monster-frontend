@@ -9,3 +9,8 @@
 .text-black-border {
     -webkit-text-stroke: 0.035em black;
 }
+
+.MuiDialog-container.MuiDialog-scrollPaper {
+    height: 100vh;
+    width: 100vw;
+}

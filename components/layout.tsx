@@ -2,6 +2,8 @@ import React, { ReactNode } from 'react';
 import Header from './header';
 import Navbar from './navbar';
 import MetaConfigs from './meta-configs';
+import LoginModal from './login-modal';
+import GlobalSnackbar from './global-snackbar';
 
 export type ChildElement = ReactNode;
 
@@ -20,6 +22,8 @@ const Layout = ({ children }: LayoutProps) => {
                 </main>
                 <Navbar />
             </div>
+            <LoginModal />
+            <GlobalSnackbar />
         </div>
     );
 };
