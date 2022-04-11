@@ -197,7 +197,7 @@ const LoginModal = () => {
         <img
             key={elem.image}
             src={elem.image}
-            className="hover:cursor-pointer w-[10vw] mx-auto my-auto"
+            className="hover:cursor-pointer w-[60%] mx-auto my-1"
             onClick={elem.onClick}
             alt="login button"
         />
@@ -219,7 +219,7 @@ const LoginModal = () => {
                         <div className="flex-1 text-5xl font-extrabold text-center text-[#ff0000] text-opacity-50 text-red-border mb-3">
                             맛집 몬스터
                         </div>
-                        <div className="flex-1 text-3xl font-bold text-center text-[#252525] mb-8">
+                        <div className="flex-1 text-2xl md:text-3xl font-bold text-center text-[#252525] mb-8">
                             친구들과 만들어가는 맛집 지도
                         </div>
                     </div>
