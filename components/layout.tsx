@@ -2,7 +2,6 @@ import React, { ReactNode } from 'react';
 import Header from './header';
 import Navbar from './navbar';
 import MetaConfigs from './meta-configs';
-import usePwaInstall from '../hooks/use-pwa-install';
 
 export type ChildElement = ReactNode;
 
@@ -11,8 +10,6 @@ export interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-    usePwaInstall();
-
     return (
         <div>
             <MetaConfigs />
