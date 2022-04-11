@@ -126,15 +126,17 @@ const LoginModal = () => {
                 disableEnforceFocus
                 disableEscapeKeyDown
                 open
+                fullWidth
+                maxWidth="sm"
             >
-                <Paper className="h-[65vh] w-[20vw] mx-auto my-auto bg-white flex flex-col flex-shrink py-[17.5vh]">
+                <Paper className="h-[100%] w-[100%] my-auto bg-white flex flex-col flex-shrink py-[17.5vh]">
                     <div className="flex flex-shrink flex-1 flex-col">
                         <div className="text-3xl font-bold text-indigo-700 text-center mb-10">
                             사용자 정보 입력
                         </div>
                         <div className="flex flex-col mb-5 space-y-4">
                             <TextField
-                                className="mx-auto w-[10vw]"
+                                className="mx-auto w-[75%]"
                                 id="nickname"
                                 label="닉네임"
                                 variant="standard"
@@ -149,7 +151,7 @@ const LoginModal = () => {
                                 }
                             />
                             <TextField
-                                className="mx-auto w-[10vw]"
+                                className="mx-auto w-[75%]"
                                 id="address"
                                 label="집주소"
                                 variant="standard"
@@ -169,7 +171,7 @@ const LoginModal = () => {
                             <Button
                                 onClick={submit}
                                 variant="contained"
-                                className="bg-blue-500 text-white mx-auto mt-10 w-[7.5vw]"
+                                className="bg-blue-500 text-white mx-auto mt-10 w-[50%]"
                             >
                                 입력 완료
                             </Button>
@@ -208,18 +210,22 @@ const LoginModal = () => {
             disableEnforceFocus
             disableEscapeKeyDown
             open
+            fullWidth
+            maxWidth="sm"
         >
-            <Paper className="h-[65vh] w-[20vw] mx-auto my-auto bg-white flex flex-col flex-shrink py-[17.5vh]">
-                <div className="flex flex-shrink flex-1 flex-col">
-                    <div>
-                        <div className="text-5xl font-extrabold text-center text-[#ff0000] text-opacity-50 text-red-border mb-3">
+            <Paper className="h-[100%] w-[100%] mx-auto my-auto bg-white flex flex-col flex-shrink pt-[15vh] pb-[17.5vh]">
+                <div className="flex flex-shrink flex-1 flex-col mx-auto">
+                    <div className="flex flex-1 flex-col flex-shrink mx-auto">
+                        <div className="flex-1 text-5xl font-extrabold text-center text-[#ff0000] text-opacity-50 text-red-border mb-3">
                             맛집 몬스터
                         </div>
-                        <div className="text-3xl font-bold text-center text-[#252525] mb-8">
+                        <div className="flex-1 text-3xl font-bold text-center text-[#252525] mb-8">
                             친구들과 만들어가는 맛집 지도
                         </div>
                     </div>
-                    <div className="my-auto">{images}</div>
+                    <div className="flex flex-1 flex-col mx-auto my-auto">
+                        {images}
+                    </div>
                 </div>
             </Paper>
         </Dialog>
