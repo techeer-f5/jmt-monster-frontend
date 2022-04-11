@@ -4,6 +4,6 @@ export const gangnamLatLng = {
 };
 
 export const jungLatLng = {
-    lat: 37.4737,
-    lng: 126.6215
+    lat: 37.5641,
+    lng: 126.9979
 };
