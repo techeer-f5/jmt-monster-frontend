@@ -91,11 +91,12 @@ const MetaConfigs = () => {
             />
             <meta name="theme-color" content="#ffffff" />
 
-            <script defer src="https://developers.kakao.com/sdk/js/kakao.js" />
+            {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+            <script src="https://developers.kakao.com/sdk/js/kakao.js" />
+            {/* eslint-disable-next-line @next/next/no-sync-scripts */}
             <script
-                defer
                 type="text/javascript"
-                src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_WEB_API_KEY}`}
+                src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_WEB_API_KEY}`}
             />
         </Head>
     );

@@ -1,10 +1,8 @@
 import type { NextPage } from 'next';
-import { Typography } from '@mui/material';
+import KakaoMap from '../../components/kakao-map';
 
-const Mine: NextPage = () => (
-    <Typography variant="h1" className="text-white">
-        Hello, JMT Monster!
-    </Typography>
-);
+const Mine: NextPage = () => {
+    return <KakaoMap />;
+};
 
 export default Mine;

@@ -15,8 +15,8 @@ const Layout = ({ children }: LayoutProps) => {
             <MetaConfigs />
             <div className="bg-slate-200 min-w-screen min-h-screen flex flex-grow flex-col">
                 <Header />
-                <main className="flex flex-[1] bg-white justify-center align-middle center-children">
-                    <div>{children}</div>
+                <main className="flex flex-1 flex-grow bg-white justify-center align-middle center-children">
+                    {children}
                 </main>
                 <Navbar />
             </div>
