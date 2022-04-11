@@ -64,7 +64,7 @@ const Navbar = () => {
                                     icon ? 'mt-0' : 'mt-auto'
                                 }`}
                             >
-                                {route.name}
+                                {name}
                             </div>
                         </div>
                     </Link>
