@@ -3,7 +3,7 @@ import { Alert, Snackbar } from '@mui/material';
 import useSnackbarHandler from '../store/snackbar';
 
 const GlobalSnackbar = () => {
-    const { message, setMessage, flush } = useSnackbarHandler();
+    const { message, severity, flush } = useSnackbarHandler();
 
     const handleSnackbarClose = (
         event?: SyntheticEvent | Event,
@@ -18,7 +18,7 @@ const GlobalSnackbar = () => {
             autoHideDuration={5000}
             onClose={handleSnackbarClose}
         >
-            <Alert severity="info">{message}</Alert>
+            <Alert severity={severity}>{message}</Alert>
         </Snackbar>
     );
 };
