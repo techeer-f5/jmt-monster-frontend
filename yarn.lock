@@ -5984,6 +5984,7 @@ __metadata:
     eslint-plugin-react: ^7.29.4
     fast-check: ^2.24.0
     jest: ^27.5.1
+    kakao-yarn-sdk: "https://gist.github.com/DPS0340/1f082195bf870ac9bfeeac8fd28dda0a.git"
     next: 12.1.4
     next-pwa: ^5.5.0
     postcss: ^8.4.12
@@ -6169,6 +6170,13 @@ __metadata:
     array-includes: ^3.1.4
     object.assign: ^4.1.2
   checksum: 88c7ade9e1edb8e27021c9ac194184f47d6ffd3852807c3aac44b1610f7eb33359e1aa872a35008d43ed66b5f7be0f6fd8d6e0574d01cf3a4af3ceb0cd0b5988
+  languageName: node
+  linkType: hard
+
+"kakao-yarn-sdk@https://gist.github.com/DPS0340/1f082195bf870ac9bfeeac8fd28dda0a.git":
+  version: 1.0.0
+  resolution: "kakao-yarn-sdk@https://gist.github.com/DPS0340/1f082195bf870ac9bfeeac8fd28dda0a.git#commit=7b83414f85462ef6bc0801744e50903e4f8a2bed"
+  checksum: cefbab06bafb40c06e436c5251e72b87b8dd699c2675394f4301c47b6833a1a32af3c675a1fdf026c6fb6ba8036e62881b283255d2f0bab43b2158dfeb3210e8
   languageName: node
   linkType: hard
 

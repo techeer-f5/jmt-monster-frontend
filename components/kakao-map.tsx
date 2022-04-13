@@ -6,16 +6,7 @@ export const kakaoMapDivId = 'kakao-map';
 const KakaoMap = () => {
     const map = useKakaoMapInit();
 
-    return (
-        <div
-            id={kakaoMapDivId}
-            // FIXME: hard-coded width, height size
-            style={{
-                width: '100vw',
-                height: '85vh'
-            }}
-        />
-    );
+    return null;
 };
 
 export default KakaoMap;

@@ -20,7 +20,7 @@ const Navbar = () => {
 
     const RootNavbar = useCallback(
         ({ children }: { children?: ReactNode }) => (
-            <div className="flex flex-row w-screen bg-fuchsia-500 h-[7.5vh]">
+            <div className="flex-none flex flex-row flex-grow w-screen bg-fuchsia-500">
                 {children}
             </div>
         ),

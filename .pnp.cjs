@@ -59,6 +59,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react", "virtual:09cb86a8664d6fa7891815d24009da727ebef0075e1d1a6bb7607a40eda3b67647d8ca4389f023c104b3f1e3b15406627f82346d538910315ad92c80fa9c7ebe#npm:7.29.4"],\
             ["fast-check", "npm:2.24.0"],\
             ["jest", "virtual:09cb86a8664d6fa7891815d24009da727ebef0075e1d1a6bb7607a40eda3b67647d8ca4389f023c104b3f1e3b15406627f82346d538910315ad92c80fa9c7ebe#npm:27.5.1"],\
+            ["kakao-yarn-sdk", "https://gist.github.com/DPS0340/1f082195bf870ac9bfeeac8fd28dda0a.git#commit=7b83414f85462ef6bc0801744e50903e4f8a2bed"],\
             ["next", "virtual:09cb86a8664d6fa7891815d24009da727ebef0075e1d1a6bb7607a40eda3b67647d8ca4389f023c104b3f1e3b15406627f82346d538910315ad92c80fa9c7ebe#npm:12.1.4"],\
             ["next-pwa", "virtual:09cb86a8664d6fa7891815d24009da727ebef0075e1d1a6bb7607a40eda3b67647d8ca4389f023c104b3f1e3b15406627f82346d538910315ad92c80fa9c7ebe#npm:5.5.0"],\
             ["postcss", "npm:8.4.12"],\
@@ -8410,6 +8411,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react", "virtual:09cb86a8664d6fa7891815d24009da727ebef0075e1d1a6bb7607a40eda3b67647d8ca4389f023c104b3f1e3b15406627f82346d538910315ad92c80fa9c7ebe#npm:7.29.4"],\
             ["fast-check", "npm:2.24.0"],\
             ["jest", "virtual:09cb86a8664d6fa7891815d24009da727ebef0075e1d1a6bb7607a40eda3b67647d8ca4389f023c104b3f1e3b15406627f82346d538910315ad92c80fa9c7ebe#npm:27.5.1"],\
+            ["kakao-yarn-sdk", "https://gist.github.com/DPS0340/1f082195bf870ac9bfeeac8fd28dda0a.git#commit=7b83414f85462ef6bc0801744e50903e4f8a2bed"],\
             ["next", "virtual:09cb86a8664d6fa7891815d24009da727ebef0075e1d1a6bb7607a40eda3b67647d8ca4389f023c104b3f1e3b15406627f82346d538910315ad92c80fa9c7ebe#npm:12.1.4"],\
             ["next-pwa", "virtual:09cb86a8664d6fa7891815d24009da727ebef0075e1d1a6bb7607a40eda3b67647d8ca4389f023c104b3f1e3b15406627f82346d538910315ad92c80fa9c7ebe#npm:5.5.0"],\
             ["postcss", "npm:8.4.12"],\
@@ -8606,6 +8608,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jsx-ast-utils", "npm:3.2.2"],\
             ["array-includes", "npm:3.1.4"],\
             ["object.assign", "npm:4.1.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["kakao-yarn-sdk", [\
+        ["https://gist.github.com/DPS0340/1f082195bf870ac9bfeeac8fd28dda0a.git#commit=7b83414f85462ef6bc0801744e50903e4f8a2bed", {\
+          "packageLocation": "./.yarn/cache/kakao-yarn-sdk-https-b13cb26784-cefbab06ba.zip/node_modules/kakao-yarn-sdk/",\
+          "packageDependencies": [\
+            ["kakao-yarn-sdk", "https://gist.github.com/DPS0340/1f082195bf870ac9bfeeac8fd28dda0a.git#commit=7b83414f85462ef6bc0801744e50903e4f8a2bed"]\
           ],\
           "linkType": "HARD"\
         }]\

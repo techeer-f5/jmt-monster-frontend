@@ -1,8 +1,12 @@
+import { initKakaoMap, initKakaoSDK } from 'kakao-yarn-sdk';
 import { useEffect } from 'react';
 import { KAKAO_WEB_API_KEY, KakaoSingleton } from '../utils/kakao';
 
 const useKakaoApi = () => {
     useEffect(() => {
+        initKakaoSDK();
+        initKakaoMap();
+
         try {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
             KakaoSingleton.init(KAKAO_WEB_API_KEY);
