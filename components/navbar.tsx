@@ -4,12 +4,9 @@ import { CircularProgress, Link } from '@mui/material';
 import { useRouter } from 'next/router';
 import * as MuiIcons from '@mui/icons-material';
 import { RouterData } from '../pages/api/routes';
+import fetcherGenerator from '../fetcher-generator';
 
-const fetcher = async (url: string): Promise<RouterData> => {
-    const res = await fetch(url);
-
-    return (await res.json()) as RouterData;
-};
+const fetcher = fetcherGenerator<RouterData>();
 
 const Navbar = () => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
