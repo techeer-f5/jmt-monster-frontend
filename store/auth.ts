@@ -7,7 +7,6 @@ export interface User {
     nickname: string;
 }
 
-// TODO: OAuth 2.0 & Social login handling
 export interface AuthState {
     user: User | null;
     token: string | null;
