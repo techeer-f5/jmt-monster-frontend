@@ -31,6 +31,7 @@ export interface UserInfo {
     user?: User;
 }
 
+// TODO: Persist middleware integration
 const useAuth = create<AuthState>((set, get) => ({
     user: null,
     token: null,

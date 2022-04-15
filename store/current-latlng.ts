@@ -8,6 +8,7 @@ export interface LatLngState {
     changeZoomLevel: (zoomLevel: number) => void;
 }
 
+// TODO: Persist middleware integration
 const useCurrentLatLng = create<LatLngState>((set) => ({
     lat: null,
     lng: null,
