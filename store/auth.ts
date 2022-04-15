@@ -86,9 +86,6 @@ const useAuth = create<AuthState>((set, get) => ({
             return false;
         }
 
-        // TODO: API Integration
-        // FIXME: does nothing
-
         const userResponse = (await (
             await fetch(`${backend}/users/me`, {
                 method: 'GET',
@@ -104,7 +101,7 @@ const useAuth = create<AuthState>((set, get) => ({
 
         success = success && !!user;
 
-        // Typescript does not remove undefined type with above statement automatically..
+        // Typescript does not remove undefined type by writing above statement automatically..
         if (success && user) {
             set({
                 user
