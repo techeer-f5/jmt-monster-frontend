@@ -1,4 +1,5 @@
 import create from 'zustand';
+import { persist } from 'zustand/middleware';
 import qs from 'qs';
 import { fetchRemotes } from '../pages/api/remotes';
 
@@ -31,87 +32,95 @@ export interface UserInfo {
 }
 
 // TODO: Persist middleware integration
-const useAuth = create<AuthState>((set, get) => ({
-    user: null,
-    token: null,
-    generateToken: async (code: string) => {
-        // FIXME: Redundant code repetition
-        // FIXME: Violates DRY
-        const { backend } = await fetchRemotes();
+const useAuth = create<AuthState>(
+    persist(
+        (set, get) => ({
+            user: null,
+            token: null,
+            generateToken: async (code: string) => {
+                // FIXME: Redundant code repetition
+                // FIXME: Violates DRY
+                const { backend } = await fetchRemotes();
 
-        const url = `${backend}/auth/kakao/callback`;
-        const params = qs.stringify({
-            code
-        });
+                const url = `${backend}/auth/kakao/callback`;
+                const params = qs.stringify({
+                    code
+                });
 
-        const generatedToken = (await (
-            await fetch(url + params, {
-                method: 'GET',
-                headers: {
-                    'Content-type': 'application/json'
+                const generatedToken = (await (
+                    await fetch(url + params, {
+                        method: 'GET',
+                        headers: {
+                            'Content-type': 'application/json'
+                        }
+                    })
+                ).json()) as GeneratedToken;
+
+                const { id: token } = generatedToken;
+
+                return token;
+            },
+            validateToken: async (token: string) => {
+                const { backend } = await fetchRemotes();
+
+                const { success } = (await (
+                    await fetch(`${backend}/token/validate`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/json'
+                        },
+                        body: JSON.stringify({ token })
+                    })
+                ).json()) as TokenValid;
+
+                if (success) {
+                    set({
+                        token
+                    });
                 }
-            })
-        ).json()) as GeneratedToken;
 
-        const { id: token } = generatedToken;
+                return success;
+            },
+            fetchUserInfo: async () => {
+                const { backend } = await fetchRemotes();
+                const { token } = get();
 
-        return token;
-    },
-    validateToken: async (token: string) => {
-        const { backend } = await fetchRemotes();
-
-        const { success } = (await (
-            await fetch(`${backend}/token/validate`, {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({ token })
-            })
-        ).json()) as TokenValid;
-
-        if (success) {
-            set({
-                token
-            });
-        }
-
-        return success;
-    },
-    fetchUserInfo: async () => {
-        const { backend } = await fetchRemotes();
-        const { token } = get();
-
-        if (!token) {
-            return false;
-        }
-
-        const userResponse = (await (
-            await fetch(`${backend}/users/me`, {
-                method: 'GET',
-                headers: {
-                    'Content-type': 'application/json',
-                    Authorization: `Bearer ${token}`
+                if (!token) {
+                    return false;
                 }
-            })
-        ).json()) as UserInfo;
 
-        let { success } = userResponse;
-        const { user } = userResponse;
+                const userResponse = (await (
+                    await fetch(`${backend}/users/me`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-type': 'application/json',
+                            Authorization: `Bearer ${token}`
+                        }
+                    })
+                ).json()) as UserInfo;
 
-        success = success && !!user;
+                let { success } = userResponse;
+                const { user } = userResponse;
 
-        // Typescript does not remove undefined type by writing above statement automatically..
-        if (success && user) {
-            set({
-                user
-            });
+                success = success && !!user;
+
+                // Typescript does not remove undefined type by writing above statement automatically..
+                if (success && user) {
+                    set({
+                        user
+                    });
+                }
+
+                return success;
+            },
+            // TODO: implement signout with social login
+            signOut: async () => set({ user: null, token: null })
+        }),
+        {
+            name: 'auth'
+            // uses LocalStorage by default
         }
-
-        return success;
-    },
-    // TODO: implement signout with social login
-    signOut: async () => set({ user: null, token: null })
-}));
+    )
+);
 
 export default useAuth;
