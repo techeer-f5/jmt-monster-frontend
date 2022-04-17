@@ -4,6 +4,7 @@ const runtimeCaching = require("next-pwa/cache");
 
 const nextConfig = withPWA({
     reactStrictMode: true,
+    swcMinify: true,
     pwa: {
         dest: "public",
         register: true,
@@ -12,6 +13,9 @@ const nextConfig = withPWA({
     },
     options: {
         sourcemaps: "development" // possible values can be production, development, or none
+    },
+    experimental: {
+        outputStandalone: true
     }
 });
 
