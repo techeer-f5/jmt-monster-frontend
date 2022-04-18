@@ -5,14 +5,11 @@ import useSnackbarHandler from '../../../store/snackbar';
 import fetcherGenerator from '../../../fetcher-generator';
 import { TokenValidation } from '../../../index';
 import useAuth from '../../../store/auth';
-
-export interface KakaoAuthProps {
-    code?: string;
-}
+import Mine from '../../maps/mine';
 
 const fetcher = fetcherGenerator<TokenValidation>();
 
-const AfterKakaoSignIn: NextPage<KakaoAuthProps> = ({ code }) => {
+const AfterKakaoSignIn: NextPage = () => {
     const { user, generateToken, validateToken, fetchUserInfo } = useAuth();
     const { setMessage: setSnackbarMessage } = useSnackbarHandler();
 
@@ -27,35 +24,34 @@ const AfterKakaoSignIn: NextPage<KakaoAuthProps> = ({ code }) => {
         router.push('/');
     };
 
-    // Without code
-    useEffect(() => {
-        if (code) {
-            return;
-        }
-
-        onError();
-    }, [code, router]);
-
     // With code
     useEffect(() => {
-        if (!code) {
-            return;
-        }
         (async () => {
+            const params = new URL(document.location.toString()).searchParams;
+            const code: string | null = params.get('code');
+
+            if (!code) {
+                onError();
+
+                return;
+            }
+
             const token = await generateToken(code);
 
-            const tokenStatus = await validateToken(token);
+            console.log({ token });
+
+            const tokenStatus = token ? await validateToken(token) : false;
 
             if (!tokenStatus) {
                 onError();
                 return;
             }
 
-            await fetchUserInfo();
+            const userInfo = await fetchUserInfo();
         })();
     }, []);
 
-    return <></>;
+    return <Mine />;
 };
 
 export default AfterKakaoSignIn;

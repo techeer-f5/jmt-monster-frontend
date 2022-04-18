@@ -42,7 +42,7 @@ const useAuth = create<AuthState>(
                 // FIXME: Violates DRY
                 const { backend } = await fetchRemotes();
 
-                const url = `${backend}/auth/kakao/callback`;
+                const url = `${backend}/auth/kakao/callback?`;
                 const params = qs.stringify({
                     code
                 });
