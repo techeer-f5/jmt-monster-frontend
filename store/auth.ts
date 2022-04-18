@@ -11,8 +11,8 @@ export interface User {
 export interface AuthState {
     user: User | null;
     token: string | null;
-    generateToken: (code: string) => Promise<string>;
-    validateToken: (token: string) => Promise<boolean>;
+    generateToken: (code: string) => Promise<string | null>;
+    validateToken: () => Promise<boolean>;
     fetchUserInfo: () => Promise<boolean>;
     signOut: () => Promise<void>;
 }
@@ -47,31 +47,47 @@ const useAuth = create<AuthState>(
                     code
                 });
 
-                const generatedToken = (await (
-                    await fetch(url + params, {
+                let generatedToken: GeneratedToken;
+
+                try {
+                    const res = await fetch(url + params, {
                         method: 'GET',
                         headers: {
                             'Content-type': 'application/json'
                         }
-                    })
-                ).json()) as GeneratedToken;
+                    });
+                    generatedToken = (await res.json()) as GeneratedToken;
+                } catch (e) {
+                    console.error(e);
+                    return null;
+                }
 
                 const { id: token } = generatedToken;
 
+                if (token) {
+                    set({
+                        token
+                    });
+                }
+
                 return token;
             },
-            validateToken: async (token: string) => {
+            validateToken: async () => {
                 const { backend } = await fetchRemotes();
+                const { token } = get();
 
-                const { success } = (await (
-                    await fetch(`${backend}/token/validate`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/json'
-                        },
-                        body: JSON.stringify({ token })
-                    })
-                ).json()) as TokenValid;
+                if (!token) {
+                    return false;
+                }
+
+                const res = await fetch(`${backend}/auth/validate/${token}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-type': 'application/json'
+                    }
+                });
+
+                const { success } = (await res.json()) as TokenValid;
 
                 if (success) {
                     set({
@@ -122,5 +138,7 @@ const useAuth = create<AuthState>(
         }
     )
 );
+
+useAuth.subscribe(console.log);
 
 export default useAuth;

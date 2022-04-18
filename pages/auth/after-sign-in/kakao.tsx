@@ -26,6 +26,11 @@ const AfterKakaoSignIn: NextPage = () => {
 
     // With code
     useEffect(() => {
+        if (user) {
+            router.push('/');
+            return;
+        }
+
         (async () => {
             const params = new URL(document.location.toString()).searchParams;
             const code: string | null = params.get('code');
@@ -40,7 +45,7 @@ const AfterKakaoSignIn: NextPage = () => {
 
             console.log({ token });
 
-            const tokenStatus = token ? await validateToken(token) : false;
+            const tokenStatus = token ? await validateToken() : false;
 
             if (!tokenStatus) {
                 onError();
@@ -49,7 +54,7 @@ const AfterKakaoSignIn: NextPage = () => {
 
             const userInfo = await fetchUserInfo();
         })();
-    }, []);
+    }, [user]);
 
     return <Mine />;
 };
