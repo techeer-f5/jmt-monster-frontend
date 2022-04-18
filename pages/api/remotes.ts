@@ -5,8 +5,12 @@ export type RemoteData = {
     backend: string;
 };
 
+const data = {
+    backend: 'http://localhost:8000'
+} as RemoteData;
+
 export async function fetchRemotes() {
-    return (await (await fetch('/api/remotes')).json()) as RemoteData;
+    return data;
 }
 
 export default function getRemotes(
@@ -14,7 +18,5 @@ export default function getRemotes(
     res: NextApiResponse<RemoteData>
 ) {
     // FIXME: Production server handling
-    res.status(200).json({
-        backend: 'http://localhost:8000'
-    });
+    res.status(200).json(data);
 }
