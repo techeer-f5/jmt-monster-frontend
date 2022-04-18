@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { CircularProgress, Dialog, Paper } from '@mui/material';
 import { type Address } from 'react-daum-postcode';
 import useSWR from 'swr';
+import { useEffect } from 'react';
 import useAuth from '../store/auth';
 import fetcherGenerator from '../fetcher-generator';
 import { RemoteData } from '../pages/api/remotes';
@@ -35,12 +36,21 @@ export const handleAddressCompleteGenerator =
 const fetcher = fetcherGenerator<RemoteData>();
 
 const LoginModal = () => {
-    const { user } = useAuth();
+    const { user, token, validateToken, signOut } = useAuth();
 
     const router = useRouter();
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { data: remotes, error } = useSWR('/api/remotes', fetcher);
+
+    useEffect(() => {
+        (async () => {
+            const validation = await validateToken();
+            if (!validation) {
+                await signOut();
+            }
+        })();
+    }, [token]);
 
     if (error) {
         return <div>로그인 API를 불러오는 데에 실패했습니다.</div>;
