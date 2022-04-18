@@ -38,13 +38,7 @@ yarn-error.log*
 .idea
 
 # yarn pnp
-.yarn/*
-!.yarn/cache
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+.yarn/unplugged
 
 public/*.js
 public/*.js.map

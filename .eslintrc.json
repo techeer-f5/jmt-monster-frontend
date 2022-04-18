@@ -1,5 +1,8 @@
 {
   "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
   "extends": [
     "next/core-web-vitals",
     "eslint:recommended",
@@ -9,9 +12,8 @@
     "plugin:import/typescript",
     "plugin:prettier/recommended"
   ],
-  "plugins": [
-    "@typescript-eslint"
-  ],
+  // Do not insert typescript rules into this property! it will be ignored.
+  // Instead, insert your typescript rules in *.ts override rules.
   "rules": {
     "prettier/prettier": "error",
     // It resolves prettier plugin conflicts.
@@ -31,9 +33,12 @@
     "react/require-default-props": "off",
     "import/no-cycle": "off",
     "react/no-unused-prop-types": "off",
-    "@typescript-eslint/no-floating-promises": "off",
+    "no-void": "off",
     "no-console": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "jsx-a11y/no-noninteractive-element-interactions": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "react/prop-types": "off"
   },
   "overrides": [
     {
@@ -60,11 +65,6 @@
         "*.ts",
         "*.tsx"
       ],
-      // Your TypeScript files extension
-
-      // As mentioned in the comments, you should extend TypeScript plugins here,
-      // instead of extending them outside the `overrides`.
-      // If you don't want to extend any rules, you don't need an `extends` attribute.
       "extends": [
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking"
@@ -73,7 +73,10 @@
         "project": [
           "./tsconfig.json"
         ]
-        // Specify it only for TypeScript files
+      },
+      "rules": {
+        "@typescript-eslint/require-await": "off",
+        "@typescript-eslint/no-floating-promises": "off"
       }
     }
   ]
