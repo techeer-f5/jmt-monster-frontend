@@ -134,3 +134,5 @@ const ExtraInfo = () => {
         </Dialog>
     );
 };
+
+export default ExtraInfo;
