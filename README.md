@@ -5,11 +5,11 @@
 - [기획 및 기술 선정 Notion 페이지](https://litsynp.notion.site/7a3cbfc9e2724a8d9520757e2da254bd)
 - [Figma UI 디자인 페이지](https://www.figma.com/file/yVVsXwdnC2YO5CGBB4WmrI/%EB%A7%9B%EC%A7%91-%EB%AA%AC%EC%8A%A4%ED%84%B0-UI-%EB%94%94%EC%9E%90%EC%9D%B8?node-id=4213%3A1335)
 
-## 🛠 Work in Progress
+## **🛠 Work in Progress**
 
 맛집 몬스터는 아직 개발 중입니다..😂 직접 사용하실 수 있는 웹앱이 만들어질 때까지 체험하시고 싶으셔도 잠시만 기다려 주세요! 
 
-## **🌎Production Server**
+## **🌎 Production Server**
 
 배포 후 링크 TODO
 
