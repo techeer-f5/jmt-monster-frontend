@@ -19,7 +19,7 @@
 
 ## **🏢 System Architecture**
 
-시스템 아키텍처 설계 TODO
+![Untitled](https://user-images.githubusercontent.com/32592965/166095317-cc3aa564-1867-4b3c-a6b8-4e13831978b2.png)
 
 ## **🔧 Tech stack**
 
