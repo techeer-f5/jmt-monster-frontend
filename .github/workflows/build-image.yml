@@ -48,5 +48,5 @@ jobs:
         id: build_images
         run: |
           docker build . -t jmt-monster-frontend:latest
-          docker tag jmt-monster-backend:latest public.ecr.aws/w1d0u6d8/jmt-monster-frontend:latest
+          docker tag jmt-monster-frontend:latest public.ecr.aws/w1d0u6d8/jmt-monster-frontend:latest
           docker push public.ecr.aws/w1d0u6d8/jmt-monster-frontend:latest
