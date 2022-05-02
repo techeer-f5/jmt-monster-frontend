@@ -9,4 +9,4 @@ COPY . .
 RUN yarn add -D @swc/cli @swc/core
 
 # SSR for now. will change to SSG when having perfomance problem
-CMD ["yarn", "dev"]
+ENTRYPOINT ["yarn", "dev"]
