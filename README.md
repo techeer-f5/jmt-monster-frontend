@@ -19,7 +19,7 @@
 
 ## **🏢 System Architecture**
 
-![Untitled](https://user-images.githubusercontent.com/32592965/166095317-cc3aa564-1867-4b3c-a6b8-4e13831978b2.png)
+![Untitled](https://user-images.githubusercontent.com/32592965/166239012-edd37fb1-5202-4337-bbba-53dd8a5ee8ea.png)
 
 ## **🔧 Tech stack**
 
