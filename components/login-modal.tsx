@@ -1,11 +1,9 @@
 import { useRouter } from 'next/router';
 import { CircularProgress, Dialog, Paper } from '@mui/material';
 import { type Address } from 'react-daum-postcode';
-import useSWR from 'swr';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useAuth from '../store/auth';
-import fetcherGenerator from '../fetcher-generator';
-import { RemoteData } from '../utils/remotes';
+import { fetchRemotes, RemoteData } from '../utils/remotes';
 
 const googleLoginImage = '/images/google-login-btn.png';
 const kakaoLoginImage = '/images/kakao-login-btn.png';
@@ -33,15 +31,19 @@ export const handleAddressCompleteGenerator =
         callback(fullAddress);
     };
 
-const fetcher = fetcherGenerator<RemoteData>();
-
 const LoginModal = () => {
     const { user, token, validateToken, signOut } = useAuth();
+    const [remotes, assignRemotes] = useState<RemoteData | undefined>(
+        undefined
+    );
 
     const router = useRouter();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { data: remotes, error } = useSWR('/api/remotes', fetcher);
+    useEffect(() => {
+        (async () => {
+            assignRemotes(await fetchRemotes());
+        })();
+    }, []);
 
     useEffect(() => {
         (async () => {
@@ -51,10 +53,6 @@ const LoginModal = () => {
             }
         })();
     }, [token]);
-
-    if (error) {
-        return <div>로그인 API를 불러오는 데에 실패했습니다.</div>;
-    }
 
     if (user) {
         return null;
