@@ -7,6 +7,6 @@ WORKDIR /app
 
 COPY . .
 RUN yarn add -D @swc/cli @swc/core
+RUN yarn build
 
-# SSR for now. will change to SSG when having perfomance problem
-ENTRYPOINT ["yarn", "dev"]
+ENTRYPOINT ["yarn", "start"]
