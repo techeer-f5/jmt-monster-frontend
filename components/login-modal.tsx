@@ -5,7 +5,7 @@ import useSWR from 'swr';
 import { useEffect } from 'react';
 import useAuth from '../store/auth';
 import fetcherGenerator from '../fetcher-generator';
-import { RemoteData } from '../pages/api/remotes';
+import { RemoteData } from '../utils/remotes';
 
 const googleLoginImage = '/images/google-login-btn.png';
 const kakaoLoginImage = '/images/kakao-login-btn.png';

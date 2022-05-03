@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import qs from 'qs';
-import { fetchRemotes } from '../pages/api/remotes';
+import { fetchRemotes } from '../utils/remotes';
 
 export interface User {
     id: string;
