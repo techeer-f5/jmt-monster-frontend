@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { CircularProgress, Dialog, Paper } from '@mui/material';
+import { Dialog, Paper } from '@mui/material';
 import { type Address } from 'react-daum-postcode';
 import { useEffect, useState } from 'react';
 import useAuth from '../store/auth';
@@ -59,14 +59,7 @@ const LoginModal = () => {
     }
 
     if (!remotes) {
-        return (
-            <CircularProgress
-                className="white mx-auto my-auto"
-                sx={{
-                    color: 'white'
-                }}
-            />
-        );
+        return <></>;
     }
     const { backend } = remotes;
 

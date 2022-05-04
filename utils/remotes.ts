@@ -5,7 +5,7 @@ export type RemoteData = {
 };
 
 export function getBackendUrl(
-    frontendHostname = window.location.origin
+    frontendHostname = window.location.hostname
 ): string | null {
     if (
         frontendHostname.startsWith('localhost') ||
