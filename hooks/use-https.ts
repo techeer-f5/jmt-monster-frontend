@@ -12,7 +12,7 @@ const useHttps = () => {
                 'https'
             );
         }
-    }, [window.location.origin, window.location.protocol]);
+    }, []);
 };
 
 export default useHttps;
