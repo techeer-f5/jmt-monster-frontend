@@ -5,7 +5,14 @@ import { fetchRemotes } from '../utils/remotes';
 
 export interface User {
     id: string;
-    nickname: string;
+    name: string;
+    email: string;
+    nickname: string | null;
+    address: string | null;
+    imageUrl: string | null;
+    emailVerified: boolean;
+    extreInfoInjected: boolean;
+    verified: boolean;
 }
 
 export interface AuthState {
