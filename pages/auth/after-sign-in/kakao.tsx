@@ -27,6 +27,10 @@ const AfterKakaoSignIn: NextPage = () => {
     // With code parameter
     useEffect(() => {
         if (user) {
+            if (!user.extreInfoInjected) {
+                router.push('/auth/extra-info');
+                return;
+            }
             router.push('/');
             return;
         }
@@ -52,7 +56,7 @@ const AfterKakaoSignIn: NextPage = () => {
                 return;
             }
 
-            const userInfo = await fetchUserInfo();
+            await fetchUserInfo();
         })();
     }, [user]);
 
