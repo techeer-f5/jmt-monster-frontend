@@ -11,7 +11,7 @@ export interface User {
     address: string | null;
     imageUrl: string | null;
     emailVerified: boolean;
-    extreInfoInjected: boolean;
+    extraInfoInjected: boolean;
     verified: boolean;
 }
 

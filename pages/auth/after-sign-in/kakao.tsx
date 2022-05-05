@@ -27,7 +27,7 @@ const AfterKakaoSignIn: NextPage = () => {
     // With code parameter
     useEffect(() => {
         if (user) {
-            if (!user.extreInfoInjected) {
+            if (!user.extraInfoInjected) {
                 router.push('/auth/extra-info');
                 return;
             }
