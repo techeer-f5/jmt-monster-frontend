@@ -24,7 +24,7 @@ const AfterKakaoSignIn: NextPage = () => {
         router.push('/');
     };
 
-    // With code
+    // With code parameter
     useEffect(() => {
         if (user) {
             router.push('/');
