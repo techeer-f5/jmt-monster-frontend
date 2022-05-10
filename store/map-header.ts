@@ -1,4 +1,5 @@
 import create from 'zustand';
+import { devtools } from 'zustand/middleware';
 
 export interface TitleState {
     title: string;
@@ -10,11 +11,13 @@ export interface TitleState {
 export const defaultTitle = '내 지도';
 export const defaultLocation = '서울특별시 강남구';
 
-const useMapHeader = create<TitleState>((set) => ({
-    title: defaultTitle,
-    location: defaultLocation,
-    changeTitle: (title: string) => set({ title }),
-    changeLocation: (location: string) => set({ location })
-}));
+const useMapHeader = create<TitleState>(
+    devtools((set) => ({
+        title: defaultTitle,
+        location: defaultLocation,
+        changeTitle: (title: string) => set({ title }),
+        changeLocation: (location: string) => set({ location })
+    }))
+);
 
 export default useMapHeader;
