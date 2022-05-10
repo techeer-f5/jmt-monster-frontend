@@ -40,7 +40,7 @@ export interface UserInfo {
     user?: User;
 }
 
-const useAuth = create<AuthState>(
+const useAuth = create(
     devtools(
         persist<AuthState>(
             (set, get) => ({

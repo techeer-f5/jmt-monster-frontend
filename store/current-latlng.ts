@@ -9,7 +9,7 @@ export interface LatLngState {
     changeZoomLevel: (zoomLevel: number) => void;
 }
 
-const useCurrentLatLng = create<LatLngState>(
+const useCurrentLatLng = create(
     devtools(
         persist<LatLngState>(
             (set, get) => ({
