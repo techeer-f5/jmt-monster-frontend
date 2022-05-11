@@ -96,7 +96,7 @@ const MetaConfigs = () => {
             {/* eslint-disable-next-line @next/next/no-sync-scripts */}
             <script
                 type="text/javascript"
-                src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_WEB_API_KEY}`}
+                src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_WEB_API_KEY}&libraries=services`}
             />
         </Head>
     );

@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { KakaoMapSingleton } from '../utils/kakao';
-import { type KakaoMapType } from '../types/kakao';
 import useCurrentLatLng from '../store/current-latlng';
+import useMapState from '../store/map';
 
-export type UseKakaoMapInitResult = {
-    map: KakaoMapType;
-};
+const useKakaoMapInit = () => {
+    const { map, setMap } = useMapState();
 
-const useKakaoMapInit = (): UseKakaoMapInitResult => {
-    const [map, setMap] = useState<KakaoMapType | null>(null);
     const { lat, lng, zoomLevel } = useCurrentLatLng();
 
     useEffect(() => {
@@ -16,7 +13,7 @@ const useKakaoMapInit = (): UseKakaoMapInitResult => {
         const container = document.getElementById('kakao-map');
 
         if (!container || !lat || !lng) {
-            return;
+            return () => {};
         }
 
         const options = {
@@ -25,11 +22,11 @@ const useKakaoMapInit = (): UseKakaoMapInitResult => {
         };
 
         setMap(new KakaoMapSingleton.maps.Map(container, options));
-    }, [lat, lng, zoomLevel]);
 
-    return {
-        map
-    };
+        return () => {
+            setMap(null);
+        };
+    }, [lat, lng, zoomLevel]);
 };
 
 export default useKakaoMapInit;
