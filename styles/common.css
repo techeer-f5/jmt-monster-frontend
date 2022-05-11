@@ -1,3 +1,12 @@
+body {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+}
+
+body::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}
+
 .center-children {
     display: flex;
 }
@@ -17,4 +26,7 @@
 .MuiDialog-container.MuiDialog-scrollPaper {
     height: 100vh;
     width: 100vw;
+    
+    height: calc(100 * var(--vh));
+    width: calc(100 * var(--vw));
 }
