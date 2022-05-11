@@ -12,12 +12,18 @@ export interface ExtraUserInfos {
     address: string;
 }
 
-const ExtraInfo = () => {
+const ExtraInfo = ({
+    edit = false,
+    completeEdit
+}: {
+    edit: boolean;
+    completeEdit?: () => void;
+}) => {
     const { user, submitExtraInfo } = useAuth();
 
     const [extraUserInfos, setExtraUserInfos] = useState<ExtraUserInfos>({
-        nickname: '',
-        address: ''
+        nickname: user?.nickname ?? '',
+        address: user?.address ?? ''
     });
 
     const [daumPostCodeStatus, setDaumPostCodeStatus] = useState(false);
@@ -26,7 +32,7 @@ const ExtraInfo = () => {
     const router = useRouter();
 
     useEffect(() => {
-        if (!user || (user && user.extraInfoInjected)) {
+        if (!user || (!edit && user && user.extraInfoInjected)) {
             router.push('/');
         }
     }, []);
@@ -51,12 +57,17 @@ const ExtraInfo = () => {
             return;
         }
 
-        setSnackbarMessage(
-            'info',
-            '사용자 정보가 입력되었습니다. 맛집 몬스터에 오신 것을 환영합니다!'
-        );
+        const message = edit
+            ? '사용자 정보가 변경되었습니다.'
+            : '사용자 정보가 입력되었습니다. 맛집 몬스터에 오신 것을 환영합니다!';
 
-        await router.push('/');
+        setSnackbarMessage('info', message);
+
+        if (completeEdit) {
+            completeEdit();
+        } else {
+            await router.push('/');
+        }
     };
 
     const onHandleAddressComplete = handleAddressCompleteGenerator(
@@ -89,13 +100,18 @@ const ExtraInfo = () => {
                 disableEnforceFocus
                 disableEscapeKeyDown
                 open
+                onClose={() => {
+                    if (edit && completeEdit) {
+                        completeEdit();
+                    }
+                }}
                 fullWidth
                 maxWidth="sm"
             >
                 <Paper className="h-[100%] w-[100%] my-auto bg-white flex flex-col flex-shrink py-[17.5vh]">
                     <div className="flex flex-shrink flex-1 flex-col">
                         <div className="text-3xl font-bold text-indigo-700 text-center mb-10">
-                            사용자 정보 입력
+                            {`사용자 정보 ${edit ? '수정' : '입력'}`}
                         </div>
                         <div className="flex flex-col mb-5 space-y-4">
                             <TextField
@@ -105,6 +121,7 @@ const ExtraInfo = () => {
                                 variant="standard"
                                 autoComplete="off"
                                 onKeyPress={onKeyPress}
+                                value={extraUserInfos.nickname}
                                 onChange={(event: any) =>
                                     setExtraUserInfos({
                                         ...extraUserInfos,
@@ -125,7 +142,10 @@ const ExtraInfo = () => {
                             />
                             {daumPostCodeStatus && (
                                 // FIXME: Resolves that shows not available message when extend width
-                                <Dialog open={daumPostCodeStatus}>
+                                <Dialog
+                                    open={daumPostCodeStatus}
+                                    onClick={() => setDaumPostCodeStatus(false)}
+                                >
                                     <DaumPostcode
                                         onComplete={onHandleAddressComplete}
                                     />
@@ -136,13 +156,13 @@ const ExtraInfo = () => {
                                 variant="contained"
                                 className="bg-blue-500 text-white mx-auto mt-10 w-[50%]"
                             >
-                                입력 완료
+                                {`${edit ? '수정' : '입력'} 완료`}
                             </Button>
                         </div>
                     </div>
                 </Paper>
             </Dialog>
-            <Mine />
+            {!edit && <Mine />}
         </>
     );
 };
