@@ -49,7 +49,7 @@ const ExtraInfo = ({
             return;
         }
 
-        const result = await submitExtraInfo(extraUserInfos);
+        const result = await submitExtraInfo(extraUserInfos, edit);
 
         if (!result) {
             setSnackbarMessage('error', '사용자 정보 입력에 실패했습니다.');

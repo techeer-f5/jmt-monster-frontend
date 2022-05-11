@@ -21,7 +21,10 @@ export interface AuthState {
     token: string | null;
     generateToken: (code: string) => Promise<string | null>;
     validateToken: () => Promise<boolean>;
-    submitExtraInfo: (extraUserInfo: ExtraUserInfos) => Promise<boolean>;
+    submitExtraInfo: (
+        extraUserInfo: ExtraUserInfos,
+        edit: boolean
+    ) => Promise<boolean>;
     fetchUserInfo: () => Promise<boolean>;
     signOut: () => Promise<void>;
 }
@@ -109,7 +112,10 @@ const useAuth = create(
 
                     return success;
                 },
-                submitExtraInfo: async (extraUserInfos: ExtraUserInfos) => {
+                submitExtraInfo: async (
+                    extraUserInfos: ExtraUserInfos,
+                    edit: boolean
+                ) => {
                     const { backend } = await fetchRemotes();
                     const { token } = get();
 
@@ -118,7 +124,7 @@ const useAuth = create(
                     }
 
                     const res = await fetch(`${backend}/users/me/extra-info`, {
-                        method: 'POST',
+                        method: edit ? 'PUT' : 'POST',
                         headers: {
                             Accept: 'application/json',
                             'Content-type': 'application/json',
