@@ -19,7 +19,10 @@ export interface User {
 export interface AuthState {
     user: User | null;
     token: string | null;
-    generateToken: (code: string) => Promise<string | null>;
+    generateToken: (
+        code: string,
+        provider: 'kakao' | 'google'
+    ) => Promise<string | null>;
     validateToken: () => Promise<boolean>;
     submitExtraInfo: (
         extraUserInfo: ExtraUserInfos,
@@ -49,12 +52,15 @@ const useAuth = create(
             (set, get) => ({
                 user: null,
                 token: null,
-                generateToken: async (code: string) => {
+                generateToken: async (
+                    code: string,
+                    provider: 'kakao' | 'google'
+                ) => {
                     // FIXME: Redundant code repetition
                     // FIXME: Violates DRY
                     const { backend } = await fetchRemotes();
 
-                    const url = `${backend}/auth/kakao/callback?`;
+                    const url = `${backend}/auth/${provider}/callback?`;
                     const params = qs.stringify({
                         code
                     });
