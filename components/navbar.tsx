@@ -17,7 +17,7 @@ const Navbar = () => {
 
     const RootNavbar = useCallback(
         ({ children }: { children?: ReactNode }) => (
-            <div className="flex flex-row w-screen bg-fuchsia-500 h-[7.5vh]">
+            <div className="flex flex-row w-screen bg-fuchsia-500 min-h-[7.5vh] flex-shrink">
                 {children}
             </div>
         ),
@@ -50,7 +50,7 @@ const Navbar = () => {
                             }`}
                         >
                             {icon && (
-                                <div className="mx-auto mt-auto mb-0 flex flex-1 flex-grow">
+                                <div className="mx-auto mt-0 mb-0 flex flex-1 flex-grow">
                                     {createElement(MuiIcons[icon], {
                                         className:
                                             'flex-1 my-auto mx-auto text-3xl md:text-4xl lg:text-5xl'
@@ -58,7 +58,7 @@ const Navbar = () => {
                                 </div>
                             )}
                             <div
-                                className={`mx-auto mb-auto text-base md:text-lg lg:text-xl ${
+                                className={`mx-auto mb-auto text-base md:text-lg lg:text-xl flex-1 flex-grow ${
                                     icon ? 'mt-0' : 'mt-auto'
                                 }`}
                             >

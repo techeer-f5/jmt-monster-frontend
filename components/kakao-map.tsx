@@ -59,14 +59,13 @@ const KakaoMap = () => {
     }, [mapRef]);
 
     return (
-        <div
-            id={kakaoMapDivId}
-            // FIXME: hard-coded width, height size
-            style={{
-                width: '100vw',
-                height: '85vh'
-            }}
-        />
+        <div className="w-screen flex flex-1 my-0">
+            <div
+                id={kakaoMapDivId}
+                // FIXME: hard-coded width, height size
+                className="w-[100%] h-[100%]"
+            />
+        </div>
     );
 };
 
