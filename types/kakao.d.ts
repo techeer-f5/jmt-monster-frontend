@@ -20,11 +20,22 @@ export type RegionResponse = Array<{
     y: number;
 }>;
 
+export type AddressResponse = Array<{
+    address_name: string;
+    address_type: string;
+    x: number;
+    y: number;
+}>;
+
 export type KakaoGeocoderType = {
     coord2RegionCode: (
         lng: number,
         lat: number,
         callback: (result: RegionResponse, status: Status) => void
+    ) => void;
+    addressSearch: (
+        address: string,
+        callback: (result: AddressResponse, status: Status) => void
     ) => void;
 };
 
