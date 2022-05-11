@@ -1,5 +1,5 @@
 import create from 'zustand';
-import { persist } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 
 export interface LatLngState {
     lat: number | null;
@@ -9,19 +9,21 @@ export interface LatLngState {
     changeZoomLevel: (zoomLevel: number) => void;
 }
 
-const useCurrentLatLng = create<LatLngState>(
-    persist(
-        (set, get) => ({
-            lat: null,
-            lng: null,
-            zoomLevel: 8,
-            changeLatLng: (lat: number, lng: number) => set({ lat, lng }),
-            changeZoomLevel: (zoomLevel: number) => set({ zoomLevel })
-        }),
-        {
-            name: 'lat-lng'
-            // uses LocalStorage by default
-        }
+const useCurrentLatLng = create(
+    devtools(
+        persist<LatLngState>(
+            (set, get) => ({
+                lat: null,
+                lng: null,
+                zoomLevel: 8,
+                changeLatLng: (lat: number, lng: number) => set({ lat, lng }),
+                changeZoomLevel: (zoomLevel: number) => set({ zoomLevel })
+            }),
+            {
+                name: 'lat-lng'
+                // uses LocalStorage by default
+            }
+        )
     )
 );
 

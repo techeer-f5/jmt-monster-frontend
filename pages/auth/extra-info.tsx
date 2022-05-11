@@ -13,7 +13,7 @@ export interface ExtraUserInfos {
 }
 
 const ExtraInfo = () => {
-    const { user } = useAuth();
+    const { user, submitExtraInfo } = useAuth();
 
     const [extraUserInfos, setExtraUserInfos] = useState<ExtraUserInfos>({
         nickname: '',
@@ -26,12 +26,12 @@ const ExtraInfo = () => {
     const router = useRouter();
 
     useEffect(() => {
-        if (!user) {
+        if (!user || (user && user.extraInfoInjected)) {
             router.push('/');
         }
     }, []);
 
-    const submit = () => {
+    const submit = async () => {
         const { nickname, address } = extraUserInfos;
 
         if (!nickname || !address) {
@@ -43,14 +43,20 @@ const ExtraInfo = () => {
             return;
         }
 
+        const result = await submitExtraInfo(extraUserInfos);
+
+        if (!result) {
+            setSnackbarMessage('error', '사용자 정보 입력에 실패했습니다.');
+
+            return;
+        }
+
         setSnackbarMessage(
             'info',
             '사용자 정보가 입력되었습니다. 맛집 몬스터에 오신 것을 환영합니다!'
         );
 
-        // setExtraInfosSubmitted(true);
-
-        // TODO: Integrate with API
+        await router.push('/');
     };
 
     const onHandleAddressComplete = handleAddressCompleteGenerator(
@@ -69,7 +75,9 @@ const ExtraInfo = () => {
 
     const onKeyPress: KeyboardEventHandler<HTMLDivElement> = (event) => {
         if (event.key === 'Enter') {
-            submit();
+            (async () => {
+                await submit();
+            })();
         }
     };
 
@@ -124,7 +132,7 @@ const ExtraInfo = () => {
                                 </Dialog>
                             )}
                             <Button
-                                onClick={submit}
+                                onClick={() => void submit()}
                                 variant="contained"
                                 className="bg-blue-500 text-white mx-auto mt-10 w-[50%]"
                             >
