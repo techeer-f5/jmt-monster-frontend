@@ -67,7 +67,9 @@ const LoginModal = () => {
         router.push(`${backend}/auth/kakao/login`);
     };
 
-    const performGoogleSignIn = () => {};
+    const performGoogleSignIn = () => {
+        router.push(`${backend}/auth/google/login`);
+    };
 
     const images = [
         {

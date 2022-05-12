@@ -13,7 +13,7 @@ export const extractAddress = (result: RegionResponse) => {
             return result[0][`region_${idx}depth_name`];
         })
         .filter((e) => e)
-        .reduce((a, b) => `${a} ${b}`);
+        .reduce((a, b) => `${a} ${b}`, '');
 };
 
 const KakaoMap = () => {

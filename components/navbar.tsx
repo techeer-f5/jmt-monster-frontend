@@ -50,19 +50,17 @@ const Navbar = () => {
                             }`}
                         >
                             {icon && (
-                                <div className="mx-auto mt-0 mb-0 flex flex-1 flex-grow">
+                                <div className="mx-auto my-auto flex flex-[2_2_0%]">
                                     {createElement(MuiIcons[icon], {
                                         className:
-                                            'flex-1 my-auto mx-auto text-3xl md:text-4xl lg:text-5xl'
+                                            'flex-1 my-auto text-3xl md:text-4xl lg:text-5xl'
                                     })}
                                 </div>
                             )}
-                            <div
-                                className={`mx-auto mb-auto text-base md:text-lg lg:text-xl flex-1 flex-grow ${
-                                    icon ? 'mt-0' : 'mt-auto'
-                                }`}
-                            >
-                                {name}
+                            <div className="mx-auto my-auto flex-1 text-base md:text-lg lg:text-xl flex">
+                                <div className="flex-1 flex-shrink my-auto text-center">
+                                    {name}
+                                </div>
                             </div>
                         </div>
                     </Link>
