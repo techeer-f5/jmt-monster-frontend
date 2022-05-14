@@ -19,7 +19,7 @@ const ExtraInfo = ({
     edit: boolean;
     completeEdit?: () => void;
 }) => {
-    const { user, submitExtraInfo } = useAuth();
+    const { user, signOut, submitExtraInfo } = useAuth();
 
     const [extraUserInfos, setExtraUserInfos] = useState<ExtraUserInfos>({
         nickname: user?.nickname ?? '',
@@ -49,11 +49,21 @@ const ExtraInfo = ({
             return;
         }
 
-        const result = await submitExtraInfo(extraUserInfos, edit);
-
-        if (!result) {
+        const onFailed = async () => {
             setSnackbarMessage('error', '사용자 정보 입력에 실패했습니다.');
+            await signOut();
+            await router.push('/');
+        };
 
+        try {
+            const result = await submitExtraInfo(extraUserInfos, edit);
+
+            if (!result) {
+                await onFailed();
+                return;
+            }
+        } catch (e) {
+            await onFailed();
             return;
         }
 

@@ -158,15 +158,21 @@ const useAuth = create(
                         return false;
                     }
 
-                    const userResponse = (await (
-                        await fetch(`${backend}/users/me`, {
+                    let response;
+
+                    try {
+                        response = await fetch(`${backend}/users/me`, {
                             method: 'GET',
                             headers: {
                                 'Content-type': 'application/json',
                                 Authorization: `Bearer ${token}`
                             }
-                        })
-                    ).json()) as UserInfo;
+                        });
+                    } catch (err) {
+                        return false;
+                    }
+
+                    const userResponse = (await response.json()) as UserInfo;
 
                     let { success } = userResponse;
                     const { user } = userResponse;
