@@ -33,7 +33,7 @@ export interface AuthState {
 }
 
 export interface TokenValid {
-    success: true;
+    isSuccess: boolean;
 }
 
 export interface GeneratedToken {
@@ -42,7 +42,7 @@ export interface GeneratedToken {
 }
 
 export interface UserInfo {
-    success: boolean;
+    isSuccess: boolean;
     user?: User;
 }
 
@@ -108,15 +108,15 @@ const useAuth = create(
                         }
                     );
 
-                    const { success } = (await res.json()) as TokenValid;
+                    const { isSuccess } = (await res.json()) as TokenValid;
 
-                    if (success) {
+                    if (isSuccess) {
                         set({
                             token
                         });
                     }
 
-                    return success;
+                    return isSuccess;
                 },
                 submitExtraInfo: async (
                     extraUserInfos: ExtraUserInfos,
@@ -144,11 +144,11 @@ const useAuth = create(
 
                     const result = (await res.json()) as UserInfo;
 
-                    if (result.success && result.user) {
+                    if (result.isSuccess && result.user) {
                         set({ user: result.user });
                     }
 
-                    return result.success;
+                    return result.isSuccess;
                 },
                 fetchUserInfo: async () => {
                     const { backend } = await fetchRemotes();
@@ -169,24 +169,25 @@ const useAuth = create(
                             }
                         });
                     } catch (err) {
+                        console.log({ err });
                         return false;
                     }
 
                     const userResponse = (await response.json()) as UserInfo;
 
-                    let { success } = userResponse;
+                    let { isSuccess } = userResponse;
                     const { user } = userResponse;
 
-                    success = success && !!user;
+                    isSuccess = isSuccess && !!user;
 
                     // Typescript does not remove undefined type by writing above statement automatically..
-                    if (success && user) {
+                    if (isSuccess && user) {
                         set({
                             user
                         });
                     }
 
-                    return success;
+                    return isSuccess;
                 },
                 // TODO: implement signout with social login
                 signOut: async () => set({ user: null, token: null })

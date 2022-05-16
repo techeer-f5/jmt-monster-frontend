@@ -18,7 +18,7 @@ const GlobalSnackbar = () => {
             autoHideDuration={5000}
             onClose={handleSnackbarClose}
         >
-            {message ? <Alert severity={severity}>{message}</Alert> : <></>}
+            <Alert severity={severity}>{message}</Alert>
         </Snackbar>
     );
 };

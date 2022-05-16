@@ -42,7 +42,6 @@ const AfterSignIn: React.FC<{ mode: 'kakao' | 'google' }> = ({ mode }) => {
 
             if (!code) {
                 onError();
-
                 return;
             }
 
@@ -51,6 +50,8 @@ const AfterSignIn: React.FC<{ mode: 'kakao' | 'google' }> = ({ mode }) => {
             console.log({ token });
 
             const tokenStatus = token ? await validateToken() : false;
+
+            console.log({ tokenStatus });
 
             if (!tokenStatus) {
                 onError();
