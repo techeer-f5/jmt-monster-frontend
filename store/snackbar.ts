@@ -15,7 +15,7 @@ const useSnackbarHandler = create<SnackbarStatus>(
         severity: 'info',
         setMessage: (severity: AlertColor, message: string) =>
             set({ severity, message }),
-        flush: () => set({ severity: 'info', message: '' })
+        flush: () => set({ message: '' })
     }))
 );
 
