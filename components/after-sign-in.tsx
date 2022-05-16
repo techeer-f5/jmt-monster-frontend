@@ -50,9 +50,14 @@ const AfterSignIn: React.FC<{ mode: 'kakao' | 'google' }> = ({ mode }) => {
 
             console.log({ token });
 
-            const tokenStatus = token ? await validateToken() : false;
+            if (!token) {
+                onError();
+                return;
+            }
 
-            if (!tokenStatus) {
+            const validated = await validateToken();
+
+            if (!validated) {
                 onError();
                 return;
             }
