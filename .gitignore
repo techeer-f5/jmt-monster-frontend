@@ -42,3 +42,5 @@ yarn-error.log*
 
 public/*.js
 public/*.js.map
+
+.vscode
