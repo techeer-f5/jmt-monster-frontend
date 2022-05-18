@@ -2,13 +2,37 @@ import type { NextPage } from 'next';
 import { useEffect } from 'react';
 import KakaoMap from '../../components/kakao-map';
 import useMapHeader from '../../store/map-header';
-import useCurrentLatLng from '../../store/current-latlng';
-import { jungLatLng } from '../../utils/sample-latlngs';
-import useAuth from '../../store/auth';
 import maps from '../../static/maps';
 import { KakaoMapSingleton } from '../../utils/kakao';
 import useMapState from '../../store/map';
 import { KakaoLatLngType, KakaoPolygonType } from '../../types/kakao';
+
+// Original code from https://stackoverflow.com/a/29915728/11853111
+export function pointIsInPolygon(
+    point: KakaoLatLngType,
+    polygon: Array<KakaoLatLngType>
+): boolean {
+    // ray-casting algorithm based on
+    // https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html/pnpoly.html
+
+    const x = point.getLat();
+    const y = point.getLng();
+
+    let inside = false;
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const xi = polygon[i].getLat();
+        const yi = polygon[i].getLng();
+        const xj = polygon[j].getLat();
+        const yj = polygon[j].getLng();
+
+        const intersect =
+            yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+        if (intersect) inside = !inside;
+    }
+
+    return inside;
+}
 
 const Maps: NextPage = () => {
     const { map, setMap } = useMapState();
@@ -46,11 +70,14 @@ const Maps: NextPage = () => {
                     return new KakaoMapSingleton.maps.LatLng(pair[1], pair[0]);
                 });
 
-                const lat = (maxLat + minLat) / 2;
+                const centerLat = (maxLat + minLat) / 2;
 
-                const lng = (maxLng + minLng) / 2;
+                const centerLng = (maxLng + minLng) / 2;
 
-                const center = new KakaoMapSingleton.maps.LatLng(lat, lng);
+                const center = new KakaoMapSingleton.maps.LatLng(
+                    centerLat,
+                    centerLng
+                );
 
                 const polygon = new KakaoMapSingleton.maps.Polygon({
                     map,
@@ -66,29 +93,51 @@ const Maps: NextPage = () => {
 
                 polygon.setMap(map);
 
+                function setOverLay() {
+                    polygons
+                        .filter((e) => e !== polygon)
+                        .forEach((e) => e.setOptions({ fillColor: '#fff' }));
+
+                    polygon.setOptions({ fillColor: '#09f' });
+
+                    customOverlay.setContent(`<div class="area">${name}</div>`);
+
+                    customOverlay.setPosition(center);
+
+                    customOverlay.setMap(map);
+                }
+
+                function mouseOut(mouseEvent) {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    const { latLng: latLngTemp } = mouseEvent;
+                    const latLng = latLngTemp as KakaoLatLngType;
+
+                    const isInPolygon = pointIsInPolygon(latLng, arr2);
+
+                    console.log({ isInPolygon });
+
+                    polygons
+                        .filter((e) => e !== polygon)
+                        .forEach((e) => e.setOptions({ fillColor: '#fff' }));
+
+                    if (isInPolygon) {
+                        return;
+                    }
+
+                    polygon.setOptions({ fillColor: '#fff' });
+                    customOverlay.setMap(null);
+                }
+
                 KakaoMapSingleton.maps.event.addListener(
                     polygon,
                     'mouseover',
-                    function (mouseEvent) {
-                        polygon.setOptions({ fillColor: '#09f' });
-
-                        customOverlay.setContent(
-                            `<div class="area">${name}</div>`
-                        );
-
-                        customOverlay.setPosition(center);
-
-                        customOverlay.setMap(map);
-                    }
+                    setOverLay
                 );
 
                 KakaoMapSingleton.maps.event.addListener(
                     polygon,
                     'mouseout',
-                    function () {
-                        polygon.setOptions({ fillColor: '#fff' });
-                        customOverlay.setMap(null);
-                    }
+                    mouseOut
                 );
             });
         });

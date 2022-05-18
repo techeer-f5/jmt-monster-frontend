@@ -14,7 +14,7 @@ export type KakaoCustomOverlayType = {
     setContent(content: string): void;
     setPosition(position: KakaoLatLngType): void;
     setMap(map: KakaoMapType | null): void;
-}
+};
 
 export type Status = 'OK' | 'ZERO_RESULT' | 'ERROR';
 
@@ -63,19 +63,28 @@ export type PolygonOptions = {
     fillColor: string;
     fillOpacity: number;
     zIndex?: number;
-}
+};
 
 export type KakaoMapSingletonType = {
     maps: {
         event: {
-            addListener(obj: any, eventType: string, callback: (event?: any) => void)
-        }
+            addListener(
+                obj: any,
+                eventType: string,
+                callback: (event?: any) => void
+            ): void;
+            removeListener(
+                obj: any,
+                eventType: string,
+                callback: (event?: any) => void
+            ): void;
+        };
         CustomOverlay: {
             new(options: object): KakaoCustomOverlayType;
-        }
+        };
         Polygon: {
             new(options: PolygonOptions): KakaoPolygonType;
-        }
+        };
         LatLng: {
             new(lat: number, lng: number): KakaoLatLngType;
         };
@@ -87,8 +96,8 @@ export type KakaoMapSingletonType = {
                 new(): KakaoGeocoderType;
             };
         };
-    }
-}
+    };
+};
 
 export type KakaoWindow = {
     Kakao: KakaoSingletonType;
