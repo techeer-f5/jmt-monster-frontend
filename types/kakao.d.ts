@@ -5,6 +5,20 @@ export type KakaoLatLngType = {
 export type KakaoMapType = {
     getCenter(): KakaoLatLngType;
 };
+export type KakaoPolygonType = {
+    setMap(map: KakaoMapType | null): void;
+    setOptions(options: object): void;
+};
+
+export type KakaoCustomOverlayType = {
+    setContent(content: string): void;
+    setPosition(position: KakaoLatLngType): void;
+    setMap(map: KakaoMapType | null): void;
+};
+
+export type KakaoMouseEvent = {
+    latLng: KakaoLatLngType;
+};
 
 export type Status = 'OK' | 'ZERO_RESULT' | 'ERROR';
 
@@ -44,17 +58,46 @@ export type KakaoSingletonType = {
     isInitialized: () => boolean;
 };
 
+export type PolygonOptions = {
+    map: KakaoMapType;
+    path: Array<KakaoLatLngType>;
+    strokeWeight: number;
+    strokeColor: string;
+    strokeOpacity: number;
+    fillColor: string;
+    fillOpacity: number;
+    zIndex?: number;
+};
+
 export type KakaoMapSingletonType = {
     maps: {
+        event: {
+            addListener(
+                obj: any,
+                eventType: string,
+                callback: (event?: any) => void
+            ): void;
+            removeListener(
+                obj: any,
+                eventType: string,
+                callback: (event?: any) => void
+            ): void;
+        };
+        CustomOverlay: {
+            new(options: object): KakaoCustomOverlayType;
+        };
+        Polygon: {
+            new(options: PolygonOptions): KakaoPolygonType;
+        };
         LatLng: {
-            new (lat: number, lng: number): KakaoLatLngType;
+            new(lat: number, lng: number): KakaoLatLngType;
         };
         Map: {
-            new (container: HTMLElement, options: object): KakaoMapType;
+            new(container: HTMLElement, options: object): KakaoMapType;
         };
         services: {
             Geocoder: {
-                new (): KakaoGeocoderType;
+                new(): KakaoGeocoderType;
             };
         };
     };

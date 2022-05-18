@@ -18,7 +18,12 @@ const GlobalSnackbar = () => {
             autoHideDuration={5000}
             onClose={handleSnackbarClose}
         >
-            <Alert severity={severity}>{message}</Alert>
+            <Alert
+                sx={{ display: message ? 'inherit' : 'none' }}
+                severity={severity}
+            >
+                {message}
+            </Alert>
         </Snackbar>
     );
 };
