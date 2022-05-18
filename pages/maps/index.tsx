@@ -2,10 +2,14 @@ import type { NextPage } from 'next';
 import { useEffect } from 'react';
 import KakaoMap from '../../components/kakao-map';
 import useMapHeader from '../../store/map-header';
-import maps, { siGunGu } from '../../static/maps';
+import maps, { cities } from '../../static/maps';
 import { KakaoMapSingleton } from '../../utils/kakao';
 import useMapState from '../../store/map';
-import { KakaoLatLngType, KakaoPolygonType } from '../../types/kakao';
+import {
+    KakaoLatLngType,
+    KakaoMouseEvent,
+    KakaoPolygonType
+} from '../../types/kakao';
 
 // Original code from https://stackoverflow.com/a/29915728/11853111
 export function pointIsInPolygon(
@@ -98,9 +102,8 @@ const Maps: NextPage = () => {
 
         // FIXME: Type errors
         // FIXME: Violates DRY
-        siGunGu.features.forEach((feature) => {
-            const name = feature.properties.SIG_KOR_NM;
-            const id = feature.properties.SIG_CD;
+        cities.features.forEach((feature) => {
+            const { SIG_KOR_NM: name, SIG_CD: id } = feature.properties;
 
             feature.geometry.coordinates.forEach((arr1) => {
                 const { polygon, center, arr2 } = setPolygons(arr1);
@@ -121,10 +124,9 @@ const Maps: NextPage = () => {
                     customOverlay.setMap(map);
                 }
 
-                function mouseOut(mouseEvent) {
+                function mouseOut(mouseEvent: KakaoMouseEvent) {
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    const { latLng: latLngTemp } = mouseEvent;
-                    const latLng = latLngTemp as KakaoLatLngType;
+                    const { latLng } = mouseEvent;
 
                     const isInPolygon = pointIsInPolygon(latLng, arr2);
 

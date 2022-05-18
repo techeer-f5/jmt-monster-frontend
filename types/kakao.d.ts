@@ -16,6 +16,10 @@ export type KakaoCustomOverlayType = {
     setMap(map: KakaoMapType | null): void;
 };
 
+export type KakaoMouseEvent = {
+    latLng: KakaoLatLngType;
+};
+
 export type Status = 'OK' | 'ZERO_RESULT' | 'ERROR';
 
 export type RegionResponse = Array<{
