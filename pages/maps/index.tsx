@@ -108,9 +108,9 @@ const Maps: NextPage = () => {
                 siGunGuPolygons.push([name, id, polygon]);
 
                 function setOverLay() {
-                    siGunGuPolygons
-                        .filter((e) => e[1].startsWith(id))
-                        .forEach((e) => e[2].setOptions({ fillColor: '#fff' }));
+                    siGunGuPolygons.forEach((e) =>
+                        e[2].setOptions({ fillColor: '#fff' })
+                    );
 
                     polygon.setOptions({ fillColor: '#09f' });
 
@@ -130,9 +130,9 @@ const Maps: NextPage = () => {
 
                     console.log({ isInPolygon });
 
-                    siGunGuPolygons
-                        .filter((e) => e[0] !== name)
-                        .forEach((e) => e[2].setOptions({ fillColor: '#fff' }));
+                    siGunGuPolygons.forEach((e) =>
+                        e[2].setOptions({ fillColor: '#fff' })
+                    );
 
                     if (isInPolygon) {
                         return;
@@ -177,19 +177,15 @@ const Maps: NextPage = () => {
 
                     siGunGuPolygons
                         .filter((e) => e[1].startsWith(id))
-                        .map((e) => {
-                            console.log(e);
-                            return e;
-                        })
                         .forEach(([, , siGunGuPolygon]) => {
                             siGunGuPolygon.setMap(map);
                         });
                 }
 
                 function setOverLay() {
-                    polygons
-                        .filter((e) => e[1].startsWith(id))
-                        .forEach((e) => e[2].setOptions({ fillColor: '#fff' }));
+                    polygons.forEach((e) =>
+                        e[2].setOptions({ fillColor: '#fff' })
+                    );
 
                     polygon.setOptions({ fillColor: '#09f' });
 
