@@ -60,6 +60,40 @@ const Maps: NextPage = () => {
         const polygons: Array<PolygonMetadata<KakaoPolygonType>> = [];
         const citiesPolygons: Array<PolygonMetadata<KakaoPolygonType>> = [];
 
+        const cityNames = cities.features.map(
+            (feature) => feature.properties.SIG_KOR_NM
+        );
+
+        const cityNameRegexes = cityNames.map(
+            (cityName) => new RegExp(`^${cityName}\S+$`)
+        );
+
+        const cityRegex = /^[ㄱ-힣]{2}시[ㄱ-힣]+$/;
+
+        cities.features.forEach((feature, idx) => {
+            const originalName = feature.properties.SIG_KOR_NM;
+            const name = cityNameRegexes.reduce(
+                (districtName, cityNameRegex, idx) => {
+                    const cityName = cityNames[idx];
+                    if (cityNameRegex.test(districtName)) {
+                        return districtName.replace(cityName, `${cityName} `);
+                    }
+
+                    if (cityRegex.test(districtName)) {
+                        return districtName.replace(
+                            /([ㄱ-힣]{2}시)([ㄱ-힣]+)/,
+                            (_, p1, p2) => `${p1} ${p2}`
+                        );
+                    }
+
+                    return districtName;
+                },
+                originalName
+            );
+
+            cities.features[idx].properties.SIG_KOR_NM = name;
+        });
+
         const setPolygons = (arr1: Array<Array<number>>) => {
             let maxLat = 0;
             let maxLng = 0;
@@ -119,6 +153,8 @@ const Maps: NextPage = () => {
             feature.geometry.coordinates.forEach((arr1) => {
                 const { polygon, center, latLngs } = setPolygons(arr1);
 
+                console.log({ name });
+
                 citiesPolygons.push({ name, id, polygon, latLngs });
 
                 function setOverLay() {
@@ -156,6 +192,7 @@ const Maps: NextPage = () => {
                 }
 
                 function submit() {
+                    console.log({ name });
                     setMessage('success', `${name} 등록 완료!`);
                 }
 
@@ -177,10 +214,6 @@ const Maps: NextPage = () => {
                     submit
                 );
             });
-        });
-
-        console.log({
-            siGunGuPolygons: citiesPolygons
         });
 
         maps.features.forEach((feature) => {
@@ -298,6 +331,7 @@ const Maps: NextPage = () => {
         });
 
         return () => {
+            citiesPolygons.forEach(({ polygon }) => polygon.setMap(null));
             polygons.forEach(({ polygon }) => polygon.setMap(null));
             customOverlay.setMap(null);
         };
