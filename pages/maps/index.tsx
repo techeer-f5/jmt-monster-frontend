@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { useEffect } from 'react';
 import KakaoMap from '../../components/kakao-map';
 import useMapHeader from '../../store/map-header';
-import maps from '../../static/maps';
+import maps, { siGunGu } from '../../static/maps';
 import { KakaoMapSingleton } from '../../utils/kakao';
 import useMapState from '../../store/map';
 import { KakaoLatLngType, KakaoPolygonType } from '../../types/kakao';
@@ -45,58 +45,72 @@ const Maps: NextPage = () => {
         }
         const customOverlay = new KakaoMapSingleton.maps.CustomOverlay({});
 
-        const polygons: Array<KakaoPolygonType> = [];
+        const polygons: Array<[string, string, KakaoPolygonType]> = [];
+        const siGunGuPolygons: Array<[string, string, KakaoPolygonType]> = [];
 
-        maps.features.forEach((feature) => {
-            const name = feature.properties.CTP_KOR_NM;
+        const setPolygons = (arr1: Array<Array<number>>) => {
+            let maxLat = 0;
+            let maxLng = 0;
+
+            let minLat = 1000;
+            let minLng = 1000;
+
+            const arr2 = arr1.map((pair) => {
+                maxLat = Math.max(maxLat, pair[1]);
+                maxLng = Math.max(maxLng, pair[0]);
+
+                minLat = Math.min(minLat, pair[1]);
+                minLng = Math.min(minLng, pair[0]);
+
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-call
+                return new KakaoMapSingleton.maps.LatLng(pair[1], pair[0]);
+            });
+
+            const centerLat = (maxLat + minLat) / 2;
+
+            const centerLng = (maxLng + minLng) / 2;
+
+            const center = new KakaoMapSingleton.maps.LatLng(
+                centerLat,
+                centerLng
+            );
+
+            const polygon = new KakaoMapSingleton.maps.Polygon({
+                map,
+                path: arr2,
+                strokeWeight: 2,
+                strokeColor: '#004c80',
+                strokeOpacity: 0.8,
+                fillColor: '#fff',
+                fillOpacity: 0.7
+            });
+
+            polygon.setMap(null);
+
+            return {
+                polygon,
+                center,
+                arr2
+            };
+        };
+
+        // FIXME: Type errors
+        // FIXME: Violates DRY
+        siGunGu.features.forEach((feature) => {
+            const name = feature.properties.SIG_KOR_NM;
+            const id = feature.properties.SIG_CD;
 
             feature.geometry.coordinates.forEach((arr1) => {
-                let maxLat = 0;
-                let maxLng = 0;
+                const { polygon, center, arr2 } = setPolygons(arr1);
 
-                let minLat = 1000;
-                let minLng = 1000;
-
-                const arr2 = arr1.map((pair) => {
-                    maxLat = Math.max(maxLat, pair[1]);
-                    maxLng = Math.max(maxLng, pair[0]);
-
-                    minLat = Math.min(minLat, pair[1]);
-                    minLng = Math.min(minLng, pair[0]);
-
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-call
-                    return new KakaoMapSingleton.maps.LatLng(pair[1], pair[0]);
-                });
-
-                const centerLat = (maxLat + minLat) / 2;
-
-                const centerLng = (maxLng + minLng) / 2;
-
-                const center = new KakaoMapSingleton.maps.LatLng(
-                    centerLat,
-                    centerLng
-                );
-
-                const polygon = new KakaoMapSingleton.maps.Polygon({
-                    map,
-                    path: arr2,
-                    strokeWeight: 2,
-                    strokeColor: '#004c80',
-                    strokeOpacity: 0.8,
-                    fillColor: '#fff',
-                    fillOpacity: 0.7
-                });
-
-                polygons.push(polygon);
-
-                polygon.setMap(map);
+                siGunGuPolygons.push([name, id, polygon]);
 
                 function setOverLay() {
-                    polygons
-                        .filter((e) => e !== polygon)
-                        .forEach((e) => e.setOptions({ fillColor: '#fff' }));
+                    siGunGuPolygons
+                        .filter((e) => e[1].startsWith(id))
+                        .forEach((e) => e[2].setOptions({ fillColor: '#fff' }));
 
                     polygon.setOptions({ fillColor: '#09f' });
 
@@ -116,9 +130,9 @@ const Maps: NextPage = () => {
 
                     console.log({ isInPolygon });
 
-                    polygons
-                        .filter((e) => e !== polygon)
-                        .forEach((e) => e.setOptions({ fillColor: '#fff' }));
+                    siGunGuPolygons
+                        .filter((e) => e[0] !== name)
+                        .forEach((e) => e[2].setOptions({ fillColor: '#fff' }));
 
                     if (isInPolygon) {
                         return;
@@ -142,8 +156,93 @@ const Maps: NextPage = () => {
             });
         });
 
+        console.log({
+            siGunGuPolygons
+        });
+
+        maps.features.forEach((feature) => {
+            const name = feature.properties.CTP_KOR_NM;
+            const id = feature.properties.CTPRVN_CD;
+
+            feature.geometry.coordinates.forEach((arr1) => {
+                const { polygon, center, arr2 } = setPolygons(arr1);
+
+                polygon.setMap(map);
+                polygons.push([name, id, polygon]);
+
+                function transition() {
+                    polygons.forEach(([, , poly]) => poly.setMap(null));
+
+                    customOverlay.setMap(null);
+
+                    siGunGuPolygons
+                        .filter((e) => e[1].startsWith(id))
+                        .map((e) => {
+                            console.log(e);
+                            return e;
+                        })
+                        .forEach(([, , siGunGuPolygon]) => {
+                            siGunGuPolygon.setMap(map);
+                        });
+                }
+
+                function setOverLay() {
+                    polygons
+                        .filter((e) => e[1].startsWith(id))
+                        .forEach((e) => e[2].setOptions({ fillColor: '#fff' }));
+
+                    polygon.setOptions({ fillColor: '#09f' });
+
+                    customOverlay.setContent(`<div class="area">${name}</div>`);
+
+                    customOverlay.setPosition(center);
+
+                    customOverlay.setMap(map);
+                }
+
+                function mouseOut(mouseEvent) {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    const { latLng: latLngTemp } = mouseEvent;
+                    const latLng = latLngTemp as KakaoLatLngType;
+
+                    const isInPolygon = pointIsInPolygon(latLng, arr2);
+
+                    console.log({ isInPolygon });
+
+                    polygons
+                        .filter((e) => e[0] !== name)
+                        .forEach((e) => e[2].setOptions({ fillColor: '#fff' }));
+
+                    if (isInPolygon) {
+                        return;
+                    }
+
+                    polygon.setOptions({ fillColor: '#fff' });
+                    customOverlay.setMap(null);
+                }
+
+                KakaoMapSingleton.maps.event.addListener(
+                    polygon,
+                    'mouseover',
+                    setOverLay
+                );
+
+                KakaoMapSingleton.maps.event.addListener(
+                    polygon,
+                    'mouseout',
+                    mouseOut
+                );
+
+                KakaoMapSingleton.maps.event.addListener(
+                    polygon,
+                    'click',
+                    transition
+                );
+            });
+        });
+
         return () => {
-            polygons.forEach((polygon) => polygon.setMap(null));
+            polygons.forEach(([, , polygon]) => polygon.setMap(null));
             customOverlay.setMap(null);
         };
     }, [map]);
