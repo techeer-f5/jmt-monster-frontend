@@ -1,8 +1,9 @@
+// @ts-nocheck
 import type { NextPage } from 'next';
 import { useEffect } from 'react';
 import KakaoMap from '../../components/kakao-map';
 import useMapHeader from '../../store/map-header';
-import maps, { cities } from '../../static/maps';
+import maps, { cities, districts } from '../../static/maps';
 import { KakaoMapSingleton } from '../../utils/kakao';
 import useMapState from '../../store/map';
 import {
@@ -15,6 +16,8 @@ import useSnackbarHandler from '../../store/snackbar';
 export interface PolygonMetadata<T> {
     id: string;
     name: string;
+    sido?: string;
+    sgg?: string;
     latLngs: KakaoLatLngType[];
     polygon: T;
 }
@@ -53,12 +56,16 @@ const Maps: NextPage = () => {
 
     useEffect(() => {
         if (!map) {
-            return () => { };
+            return () => undefined;
         }
         const customOverlay = new KakaoMapSingleton.maps.CustomOverlay({});
 
         const polygons: Array<PolygonMetadata<KakaoPolygonType>> = [];
         const citiesPolygons: Array<PolygonMetadata<KakaoPolygonType>> = [];
+        const districtPolygons: Array<PolygonMetadata<KakaoPolygonType>> = [];
+        const levels = [polygons, citiesPolygons, districtPolygons];
+
+        const selectedPolygons: KakaoPolygonType[][] = [[], [], []];
 
         const cityNames = cities.features.map(
             (feature) => feature.properties.SIG_KOR_NM
@@ -142,197 +149,231 @@ const Maps: NextPage = () => {
             };
         };
 
-        // FIXME: Type errors
-        // FIXME: Violates DRY
-        cities.features.forEach((feature) => {
-            const { SIG_KOR_NM: name, SIG_CD: id } = feature.properties as {
-                SIG_KOR_NM: string;
-                SIG_CD: string;
-            };
+        const submit = (name: string) => {
+            levels.forEach((e) =>
+                e.forEach(({ polygon }) => {
+                    polygon.setMap(null);
+                })
+            );
+            for (let i = 0; i < 3; i++) {
+                selectedPolygons[i] = [];
+            }
+            customOverlay.setMap(null);
+            setMessage('success', `${name} 등록 완료!`);
+        };
 
-            feature.geometry.coordinates.forEach((arr1) => {
-                const { polygon, center, latLngs } = setPolygons(arr1);
+        const setOverLay = (
+            polygons: PolygonMetadata<KakaoPolygonType>[],
+            polygon: KakaoPolygonType,
+            name: string,
+            center: KakaoLatLngType
+        ) => {
+            polygons.forEach(({ polygon }) =>
+                polygon.setOptions({ fillColor: '#fff' })
+            );
 
-                console.log({ name });
+            polygon.setOptions({ fillColor: '#09f' });
 
-                citiesPolygons.push({ name, id, polygon, latLngs });
+            customOverlay.setContent(`<div class="area">${name}</div>`);
 
-                function setOverLay() {
-                    citiesPolygons.forEach(({ polygon }) =>
-                        polygon.setOptions({ fillColor: '#fff' })
-                    );
+            customOverlay.setPosition(center);
 
-                    polygon.setOptions({ fillColor: '#09f' });
+            customOverlay.setMap(map);
+        };
 
-                    customOverlay.setContent(`<div class="area">${name}</div>`);
+        const mouseOut = (
+            polygons: PolygonMetadata<KakaoPolygonType>[],
+            polygon: KakaoPolygonType,
+            latLngs: KakaoLatLngType[],
+            id: string,
+            idx: number,
+            mouseEvent: KakaoMouseEvent
+        ) => {
+            const { latLng: point } = mouseEvent;
 
-                    customOverlay.setPosition(center);
+            const isInPolygon = pointIsInPolygon(point, latLngs);
 
-                    customOverlay.setMap(map);
-                }
+            if (isInPolygon) {
+                return;
+            }
 
-                function mouseOut(mouseEvent: KakaoMouseEvent) {
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                    const { latLng } = mouseEvent;
+            polygon.setOptions({ fillColor: '#fff' });
+            customOverlay.setMap(null);
+        };
 
-                    const isInPolygon = pointIsInPolygon(latLng, latLngs);
+        const transition = (id: string, level: number) => {
+            console.log(12314);
 
-                    console.log({ isInPolygon });
+            for (let prev = 0; prev <= level; prev++) {
+                levels[prev].forEach(({ polygon }) => polygon.setMap(null));
+            }
 
-                    citiesPolygons.forEach(({ polygon }) =>
-                        polygon.setOptions({ fillColor: '#fff' })
-                    );
+            customOverlay.setMap(null);
 
-                    if (isInPolygon) {
-                        return;
+            levels[level + 1]
+                .filter(({ id: locationId, sido, sgg }) => {
+                    console.log({ sido, sgg, id });
+                    if (level === 0) {
+                        return locationId.startsWith(id);
                     }
+                    if (level === 1) {
+                        return sido === id || sgg === id;
+                    }
+                    return false;
+                })
+                .forEach(({ polygon }) => {
+                    selectedPolygons[level + 1].push(polygon);
+                });
 
-                    polygon.setOptions({ fillColor: '#fff' });
-                    customOverlay.setMap(null);
-                }
+            const selected = selectedPolygons[level + 1];
 
-                function submit() {
-                    console.log({ name });
-                    setMessage('success', `${name} 등록 완료!`);
-                }
-
-                KakaoMapSingleton.maps.event.addListener(
-                    polygon,
-                    'mouseover',
-                    setOverLay
-                );
-
-                KakaoMapSingleton.maps.event.addListener(
-                    polygon,
-                    'mouseout',
-                    mouseOut
-                );
-
-                KakaoMapSingleton.maps.event.addListener(
-                    polygon,
-                    'click',
-                    submit
-                );
-            });
-        });
-
-        maps.features.forEach((feature) => {
-            const name = feature.properties.CTP_KOR_NM;
-            const id = feature.properties.CTPRVN_CD;
-
-            feature.geometry.coordinates.forEach((arr1) => {
-                const { polygon, center, latLngs } = setPolygons(arr1);
-
+            selected.forEach((polygon) => {
+                console.log({ polygon });
                 polygon.setMap(map);
-                polygons.push({ name, id, polygon, latLngs });
+            });
 
-                function transition() {
-                    polygons.forEach(({ polygon }) => polygon.setMap(null));
+            function rollback(mouseEvent: KakaoMouseEvent) {
+                const { latLng: point } = mouseEvent;
 
-                    customOverlay.setMap(null);
+                selectedPolygons[level].forEach((e) => e.setMap(null));
+                selectedPolygons[level] = [];
 
-                    citiesPolygons
-                        .filter(({ id: cityId }) => cityId.startsWith(id))
-                        .forEach(({ polygon }) => {
-                            polygon.setMap(map);
-                        });
+                const polys = levels[level];
 
-                    function rollback(mouseEvent: KakaoMouseEvent) {
-                        const { latLng: point } = mouseEvent;
+                const isInPolygon = polys
+                    .filter(({ id: polygonId }) => polygonId === id)
+                    .map(({ latLngs }) => pointIsInPolygon(point, latLngs))
+                    .reduce((a, b) => a || b, false);
 
-                        const isInPolygon = polygons
-                            .filter(
-                                ({ name: polygonName }) => polygonName === name
-                            )
-                            .map(({ latLngs }) =>
-                                pointIsInPolygon(point, latLngs)
-                            )
-                            .reduce((a, b) => a || b, false);
-
-                        if (isInPolygon) {
-                            return;
-                        }
-
-                        citiesPolygons.forEach(({ polygon }) => {
-                            polygon.setMap(null);
-                        });
-
-                        polygons.forEach(({ polygon }) => polygon.setMap(map));
-
-                        KakaoMapSingleton.maps.event.removeListener(
-                            map,
-                            'click',
-                            rollback
-                        );
-                    }
-
-                    setTimeout(() => {
-                        KakaoMapSingleton.maps.event.addListener(
-                            map,
-                            'click',
-                            rollback
-                        );
-                    }, 0);
+                if (isInPolygon) {
+                    return;
                 }
 
-                function setOverLay() {
-                    polygons.forEach(({ polygon }) =>
-                        polygon.setOptions({ fillColor: '#fff' })
-                    );
+                selectedPolygons = [[], [], []];
+                levels.forEach((level) => {
+                    level.forEach(({ polygon }) => {
+                        polygon.setMap(null);
+                    });
+                });
 
-                    polygon.setOptions({ fillColor: '#09f' });
+                KakaoMapSingleton.maps.event.removeListener(
+                    map,
+                    'click',
+                    rollback
+                );
+            }
 
-                    customOverlay.setContent(`<div class="area">${name}</div>`);
+            setTimeout(() => {
+                KakaoMapSingleton.maps.event.addListener(
+                    map,
+                    'click',
+                    rollback
+                );
+            }, 0);
+        };
 
-                    customOverlay.setPosition(center);
+        const addEventListeners = (
+            idx: number,
+            polygon: KakaoPolygonType,
+            name: string,
+            id: string,
+            center: KakaoLatLngType,
+            latLngs: KakaoLatLngType[]
+        ) => {
+            KakaoMapSingleton.maps.event.addListener(polygon, 'mouseover', () =>
+                setOverLay(polygons, polygon, name, center)
+            );
 
-                    customOverlay.setMap(map);
+            KakaoMapSingleton.maps.event.addListener(
+                polygon,
+                'mouseout',
+                (mouseEvent: KakaoMouseEvent) =>
+                    mouseOut(polygons, polygon, latLngs, id, idx, mouseEvent)
+            );
+
+            KakaoMapSingleton.maps.event.addListener(polygon, 'click', () => {
+                if (idx < 2) {
+                    transition(id, idx);
+                } else {
+                    submit(name);
+                }
+            });
+        };
+
+        [maps, cities, districts].forEach((e, idx) => {
+            const { features } = e;
+
+            features.forEach((feature) => {
+                let nameKey: string;
+                let idKey: string;
+
+                if (idx === 0) {
+                    nameKey = 'CTP_KOR_NM';
+                    idKey = 'CTPRVN_CD';
+                } else if (idx === 1) {
+                    nameKey = 'SIG_KOR_NM';
+                    idKey = 'SIG_CD';
+                } else {
+                    nameKey = 'adm_nm';
+                    idKey = 'adm_cd';
                 }
 
-                function mouseOut(mouseEvent: KakaoMouseEvent) {
-                    const { latLng: point } = mouseEvent;
+                const { properties } = feature;
 
-                    const isInPolygon = pointIsInPolygon(point, latLngs);
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                const name: string = properties[nameKey];
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                const id: string = properties[idKey];
+                const { sido, sgg } = properties;
 
-                    console.log({ isInPolygon });
+                const selected = levels[idx];
 
-                    polygons
-                        .filter(({ name: polygonName }) => polygonName !== name)
-                        .forEach(({ polygon }) =>
-                            polygon.setOptions({ fillColor: '#fff' })
-                        );
+                feature.geometry.coordinates.forEach((coordinates) => {
+                    if (idx === 2) {
+                        coordinates.forEach((coords) => {
+                            const { polygon, center, latLngs } =
+                                setPolygons(coords);
 
-                    if (isInPolygon) {
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                            selected.push({
+                                name,
+                                id,
+                                sido,
+                                sgg,
+                                polygon,
+                                latLngs
+                            });
+
+                            addEventListeners(
+                                idx,
+                                polygon,
+                                name,
+                                id,
+                                center,
+                                latLngs
+                            );
+                        });
                         return;
                     }
 
-                    polygon.setOptions({ fillColor: '#fff' });
-                    customOverlay.setMap(null);
-                }
+                    const { polygon, center, latLngs } =
+                        setPolygons(coordinates);
 
-                KakaoMapSingleton.maps.event.addListener(
-                    polygon,
-                    'mouseover',
-                    setOverLay
-                );
+                    if (idx === 0) {
+                        polygon.setMap(map);
+                    }
 
-                KakaoMapSingleton.maps.event.addListener(
-                    polygon,
-                    'mouseout',
-                    mouseOut
-                );
+                    selected.push({ name, id, sido, sgg, polygon, latLngs });
 
-                KakaoMapSingleton.maps.event.addListener(
-                    polygon,
-                    'click',
-                    transition
-                );
+                    addEventListeners(idx, polygon, name, id, center, latLngs);
+                });
             });
         });
 
         return () => {
             citiesPolygons.forEach(({ polygon }) => polygon.setMap(null));
             polygons.forEach(({ polygon }) => polygon.setMap(null));
+            districtPolygons.forEach(({ polygon }) => polygon.setMap(null));
             customOverlay.setMap(null);
         };
     }, [map]);
