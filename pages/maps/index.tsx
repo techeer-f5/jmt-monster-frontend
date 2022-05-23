@@ -205,19 +205,21 @@ const Maps: NextPage = () => {
             selectedPolygons = [[], [], []];
             customOverlay.setMap(null);
 
-            levels.forEach((polys) =>
-                polys
-                    .filter(({ id: locationId }) => locationId.startsWith(id))
-                    .forEach((e) => {
-                        e.forEach((poly) => {
-                            selectedPolygons[level].push(poly);
-                        });
-                    })
-            );
+            levels[level]
+                .filter(({ id: locationId, sgg }) => {
+                    if (level === 3) {
+                        return sgg === id;
+                    }
+                    return locationId.startsWith(id);
+                })
+                .forEach(({ polygon }) => {
+                    selectedPolygons[level].push(polygon);
+                });
 
             const selected = selectedPolygons[level];
 
             selected.forEach((polygon) => {
+                console.log({ polygon });
                 polygon.setMap(map);
             });
 
@@ -238,8 +240,14 @@ const Maps: NextPage = () => {
                     return;
                 }
 
-                if (level >= 0) {
-                    selectedPolygons[level - 1].forEach((e) => e.setMap(e));
+                if (level < 2) {
+                    selectedPolygons[level + 1] = [];
+                    levels[level + 1]
+                        .filter(({ id: polygonId }) => polygonId.startsWith(id))
+                        .forEach(({ polygon }) => {
+                            polygon.setMap(map);
+                            selectedPolygons[level + 1].push(polygon);
+                        });
                 }
 
                 KakaoMapSingleton.maps.event.removeListener(
@@ -286,8 +294,7 @@ const Maps: NextPage = () => {
             });
         };
 
-        // FIXME: Type errors
-        [maps].forEach((e, idx) => {
+        [maps, cities, districts].forEach((e, idx) => {
             const { features } = e;
 
             features.forEach((feature) => {
