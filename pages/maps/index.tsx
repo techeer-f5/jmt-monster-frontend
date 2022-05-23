@@ -16,6 +16,8 @@ import useSnackbarHandler from '../../store/snackbar';
 export interface PolygonMetadata<T> {
     id: string;
     name: string;
+    sido?: string;
+    sgg?: string;
     latLngs: KakaoLatLngType[];
     polygon: T;
 }
@@ -63,7 +65,7 @@ const Maps: NextPage = () => {
         const districtPolygons: Array<PolygonMetadata<KakaoPolygonType>> = [];
         const levels = [polygons, citiesPolygons, districtPolygons];
 
-        let selectedPolygons: KakaoPolygonType[][] = [[], [], []];
+        const selectedPolygons: KakaoPolygonType[][] = [[], [], []];
 
         const cityNames = cities.features.map(
             (feature) => feature.properties.SIG_KOR_NM
@@ -148,6 +150,15 @@ const Maps: NextPage = () => {
         };
 
         const submit = (name: string) => {
+            levels.forEach((e) =>
+                e.forEach(({ polygon }) => {
+                    polygon.setMap(null);
+                })
+            );
+            for (let i = 0; i < 3; i++) {
+                selectedPolygons[i] = [];
+            }
+            customOverlay.setMap(null);
             setMessage('success', `${name} 등록 완료!`);
         };
 
@@ -175,17 +186,12 @@ const Maps: NextPage = () => {
             polygon: KakaoPolygonType,
             latLngs: KakaoLatLngType[],
             id: string,
+            idx: number,
             mouseEvent: KakaoMouseEvent
         ) => {
             const { latLng: point } = mouseEvent;
 
             const isInPolygon = pointIsInPolygon(point, latLngs);
-
-            polygons
-                .filter(({ id: polygonId }) => polygonId !== id)
-                .forEach(({ polygon }) =>
-                    polygon.setOptions({ fillColor: '#fff' })
-                );
 
             if (isInPolygon) {
                 return;
@@ -196,27 +202,30 @@ const Maps: NextPage = () => {
         };
 
         const transition = (id: string, level: number) => {
-            if (level > 0) {
-                for (let prev = 0; prev < level; prev++) {
-                    selectedPolygons[prev].forEach((e) => e.setMap(null));
-                }
+            console.log(12314);
+
+            for (let prev = 0; prev <= level; prev++) {
+                levels[prev].forEach(({ polygon }) => polygon.setMap(null));
             }
 
-            selectedPolygons = [[], [], []];
             customOverlay.setMap(null);
 
-            levels[level]
-                .filter(({ id: locationId, sgg }) => {
-                    if (level === 3) {
-                        return sgg === id;
+            levels[level + 1]
+                .filter(({ id: locationId, sido, sgg }) => {
+                    console.log({ sido, sgg, id });
+                    if (level === 0) {
+                        return locationId.startsWith(id);
                     }
-                    return locationId.startsWith(id);
+                    if (level === 1) {
+                        return sido === id || sgg === id;
+                    }
+                    return false;
                 })
                 .forEach(({ polygon }) => {
-                    selectedPolygons[level].push(polygon);
+                    selectedPolygons[level + 1].push(polygon);
                 });
 
-            const selected = selectedPolygons[level];
+            const selected = selectedPolygons[level + 1];
 
             selected.forEach((polygon) => {
                 console.log({ polygon });
@@ -240,15 +249,12 @@ const Maps: NextPage = () => {
                     return;
                 }
 
-                if (level < 2) {
-                    selectedPolygons[level + 1] = [];
-                    levels[level + 1]
-                        .filter(({ id: polygonId }) => polygonId.startsWith(id))
-                        .forEach(({ polygon }) => {
-                            polygon.setMap(map);
-                            selectedPolygons[level + 1].push(polygon);
-                        });
-                }
+                selectedPolygons = [[], [], []];
+                levels.forEach((level) => {
+                    level.forEach(({ polygon }) => {
+                        polygon.setMap(null);
+                    });
+                });
 
                 KakaoMapSingleton.maps.event.removeListener(
                     map,
@@ -282,7 +288,7 @@ const Maps: NextPage = () => {
                 polygon,
                 'mouseout',
                 (mouseEvent: KakaoMouseEvent) =>
-                    mouseOut(polygons, polygon, latLngs, id, mouseEvent)
+                    mouseOut(polygons, polygon, latLngs, id, idx, mouseEvent)
             );
 
             KakaoMapSingleton.maps.event.addListener(polygon, 'click', () => {
@@ -318,8 +324,38 @@ const Maps: NextPage = () => {
                 const name: string = properties[nameKey];
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 const id: string = properties[idKey];
+                const { sido, sgg } = properties;
+
+                const selected = levels[idx];
 
                 feature.geometry.coordinates.forEach((coordinates) => {
+                    if (idx === 2) {
+                        coordinates.forEach((coords) => {
+                            const { polygon, center, latLngs } =
+                                setPolygons(coords);
+
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                            selected.push({
+                                name,
+                                id,
+                                sido,
+                                sgg,
+                                polygon,
+                                latLngs
+                            });
+
+                            addEventListeners(
+                                idx,
+                                polygon,
+                                name,
+                                id,
+                                center,
+                                latLngs
+                            );
+                        });
+                        return;
+                    }
+
                     const { polygon, center, latLngs } =
                         setPolygons(coordinates);
 
@@ -327,7 +363,7 @@ const Maps: NextPage = () => {
                         polygon.setMap(map);
                     }
 
-                    polygons.push({ name, id, polygon, latLngs });
+                    selected.push({ name, id, sido, sgg, polygon, latLngs });
 
                     addEventListeners(idx, polygon, name, id, center, latLngs);
                 });
