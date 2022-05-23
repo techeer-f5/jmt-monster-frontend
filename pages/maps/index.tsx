@@ -288,24 +288,29 @@ const Maps: NextPage = () => {
 
         // FIXME: Type errors
         [maps].forEach((e, idx) => {
+            const { features } = e;
+
             features.forEach((feature) => {
                 let nameKey: string;
                 let idKey: string;
 
                 if (idx === 0) {
-                    nameKey = CTP_KOR_NM;
-                    nameKey = CTPRVN_CD;
+                    nameKey = 'CTP_KOR_NM';
+                    idKey = 'CTPRVN_CD';
                 } else if (idx === 1) {
-                    nameKey = feature.properties.SIG_KOR_NM;
-                    idKey = feature.properties.SIG_CD;
+                    nameKey = 'SIG_KOR_NM';
+                    idKey = 'SIG_CD';
                 } else {
-                    nameKey = adm_nm;
-                    idKey = adm_cd;
+                    nameKey = 'adm_nm';
+                    idKey = 'adm_cd';
                 }
 
                 const { properties } = feature;
 
-                const [name, id] = [properties[nameKey], properties[idKey]];
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                const name: string = properties[nameKey];
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                const id: string = properties[idKey];
 
                 feature.geometry.coordinates.forEach((coordinates) => {
                     const { polygon, center, latLngs } =
