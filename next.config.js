@@ -16,7 +16,10 @@ const nextConfig = withPWA({
     },
     experimental: {
         outputStandalone: true
-    }
+    },
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
 });
 
 module.exports = nextConfig;
