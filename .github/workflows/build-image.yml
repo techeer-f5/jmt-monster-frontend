@@ -35,8 +35,8 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.CR_PAT }}
+          username: techeer-f5
+          password: ${{ secrets.GH_TOKEN }} 
       - name: Build and push
         uses: docker/build-push-action@v2
         id: docker_build
@@ -45,4 +45,4 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/jmt-monster-frontend:latest
+            ghcr.io/techeer-f5/jmt-monster-frontend:latest
