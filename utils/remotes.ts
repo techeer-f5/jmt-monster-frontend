@@ -21,6 +21,9 @@ export function getBackendUrl(
 
         return `https://backend.${rootDomain}`;
     }
+    if (frontendHostname.startsWith('jmtmonster.')) {
+        return `https://backend.jmtmonster.com`;
+    }
 
     return null;
 }
