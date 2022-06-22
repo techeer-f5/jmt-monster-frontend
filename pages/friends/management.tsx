@@ -7,6 +7,7 @@ import useMapHeader from '../../store/map-header';
 import useAuth from '../../store/auth';
 import useSnackbarHandler from '../../store/snackbar';
 import { fetchRemotes } from '../../utils/remotes';
+import { Page } from '../../types/jmtapi';
 
 interface FriendUser {
     id: string;
@@ -20,46 +21,9 @@ export interface Friend {
     id: string;
     fromUser: FriendUser;
     toUser: FriendUser;
-    isHangingOut: boolean;
-}
-
-export interface Page<T> {
-    content: T[];
-    pageable: {
-        sort: Sort[];
-        offset: number;
-        pageNumber: number;
-        pageSize: number;
-        paged: boolean;
-        unpaged: boolean;
-    };
-    last: boolean;
-    totalElements: number;
-    totalPages: number;
-    first: boolean;
-    sort: Sort[];
-    number: number;
-    size: number;
-    numberOfElements: number;
-    empty: boolean;
-}
-
-interface Sort {
-    direction: string;
-    property: string;
-    ignoreCase: boolean;
-    nullHandling: string;
-    descending: boolean;
-    ascending: boolean;
 }
 
 const FriendItem = ({ friend }: { friend: Friend }) => {
-    const [tempIsHangingOut, setIsHangingOut] = useState<boolean>(false);
-
-    useEffect(() => {
-        setIsHangingOut(friend.toUser.name === 'Tester 2');
-    });
-
     return (
         <div className="flex my-2 w-full items-center border-2 border-gray-800 text-gray-800 bg-white">
             <div className="w-20">
@@ -74,21 +38,12 @@ const FriendItem = ({ friend }: { friend: Friend }) => {
             </div>
             <div className="flex justify-between items-center w-full mx-6">
                 <div>{friend.toUser.name}</div>
-                {tempIsHangingOut && (
-                    <div className="p-2 border-2 border-green-500 bg-green-100">
-                        놀러가기 상태
-                    </div>
-                )}
                 <div>
                     <button
                         type="button"
-                        className={`p-2 border-2 text-gray-800 ${
-                            tempIsHangingOut
-                                ? 'border-gray-800 bg-gray-300'
-                                : 'border-gray-800 bg-white'
-                        }`}
+                        className="p-2 border-2 text-gray-800 border-gray-800 bg-green-100"
                     >
-                        {tempIsHangingOut ? '그만 놀기' : '놀러가기'}
+                        놀러가기
                     </button>
                 </div>
             </div>
