@@ -8,6 +8,7 @@ import useAuth from '../../store/auth';
 import useSnackbarHandler from '../../store/snackbar';
 import { fetchRemotes } from '../../utils/remotes';
 import { Page } from '../../types/jmtapi';
+import FriendRequestModal from '../../components/friend-request-modal';
 
 interface FriendUser {
     id: string;
@@ -58,6 +59,15 @@ const Management: NextPage = () => {
     const { changeTitle, changeLocation } = useMapHeader();
     const [friends, setFriends] = useState<Page<Friend> | null>(null);
 
+    const [openAddFriendModal, setOpenAddFriendModal] =
+        useState<boolean>(false);
+    const onClickAddFriendButton = () => {
+        setOpenAddFriendModal(true);
+    };
+    const onClickAddFriendModalCloseButton = () => {
+        setOpenAddFriendModal(false);
+    };
+
     /**
      * Retrieves friends of the logged in user from API
      *
@@ -107,9 +117,16 @@ const Management: NextPage = () => {
 
     return (
         <div className="md:w-3/5 md:mx-0 w-full mx-4">
+            {openAddFriendModal && (
+                <FriendRequestModal
+                    onClickCloseButton={onClickAddFriendModalCloseButton}
+                />
+            )}
+
             <div className="flex justify-end">
                 <button
                     type="button"
+                    onClick={onClickAddFriendButton}
                     className="mb-1 py-1 px-2.5 text-3xl font-bold border-2 border-gray-800 text-gray-800 bg-white"
                 >
                     +
