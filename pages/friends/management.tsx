@@ -24,6 +24,13 @@ export interface Friend {
     toUser: FriendUser;
 }
 
+export interface FriendRequest {
+    id: string;
+    fromUser: FriendUser;
+    toUser: FriendUser;
+    status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+}
+
 const FriendItem = ({ friend }: { friend: Friend }) => {
     return (
         <div className="flex my-2 w-full items-center border-2 border-gray-800 text-gray-800 bg-white">
@@ -47,6 +54,36 @@ const FriendItem = ({ friend }: { friend: Friend }) => {
                         놀러가기
                     </button>
                 </div>
+            </div>
+        </div>
+    );
+};
+
+const FriendRequestItem = ({
+    friendRequest
+}: {
+    friendRequest: FriendRequest;
+}) => {
+    return (
+        <div className="flex my-2 w-full items-center border-2 border-gray-800 text-gray-800 bg-white">
+            <div className="w-20">
+                <img
+                    alt={`${friendRequest.fromUser.email} profile`}
+                    src={
+                        friendRequest.fromUser.imageUrl ??
+                        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+                    }
+                    width="100%"
+                />
+            </div>
+            <div className="flex justify-between items-center w-full mx-6">
+                <div>{friendRequest.fromUser.name}</div>
+                <button
+                    type="button"
+                    className="p-2 border-2 text-gray-800 border-gray-800 bg-gray-100"
+                >
+                    수락하기
+                </button>
             </div>
         </div>
     );
