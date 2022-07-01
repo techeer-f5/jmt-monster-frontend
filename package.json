@@ -25,6 +25,7 @@
     "zustand": "^3.7.1"
   },
   "devDependencies": {
+    "@swc/core": "^1.2.208",
     "@testing-library/react": "^13.0.0",
     "@types/axios": "^0.14.0",
     "@types/jest": "^27.4.1",
