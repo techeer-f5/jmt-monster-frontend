@@ -59,7 +59,18 @@ const FriendRequestItem = ({
     };
 
     const deleteFriendRequest = async () => {
-        alert('Delete friend request');
+        const { backend } = await fetchRemotes();
+        const url = `${backend}/api/v1/friend-requests/${friendRequest.id}`;
+        const res = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        });
+
+        if (!res.ok) {
+            console.error(res.statusText);
+        }
     };
     const onClickDeleteFriendRequest = (e: React.FormEvent) => {
         e.preventDefault();
