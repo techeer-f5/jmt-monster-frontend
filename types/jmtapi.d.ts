@@ -29,3 +29,24 @@ interface Sort {
     descending: boolean;
     ascending: boolean;
 }
+
+export interface UserResponse {
+    id: string;
+    name: string;
+    email: string;
+    nickname: string | null;
+    imageUrl: string | null;
+}
+
+export interface Friend {
+    id: string;
+    fromUser: UserResponse;
+    toUser: UserResponse;
+}
+
+export interface FriendRequest {
+    id: string;
+    fromUser: UserResponse;
+    toUser: UserResponse;
+    status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+}

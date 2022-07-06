@@ -3,15 +3,7 @@ import { Dialog, Paper } from '@mui/material';
 
 import useAuth from '../store/auth';
 import { fetchRemotes } from '../utils/remotes';
-import { Page } from '../types/jmtapi';
-
-interface UserResponse {
-    id: string;
-    name: string;
-    email: string;
-    nickname: string | null;
-    imageUrl: string | null;
-}
+import { Page, UserResponse } from '../types/jmtapi';
 
 const FriendRequestModal = ({
     onClickCloseButton
