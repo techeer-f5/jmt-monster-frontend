@@ -106,8 +106,6 @@ const FriendRequests: NextPage = () => {
         setFriendRequests(result);
     };
 
-    const onClickOffsetChange = (delta: number, page: Page<any>) => {};
-
     useEffect(() => {
         changeTitle('친구 요청 관리');
         changeLocation('');
@@ -128,10 +126,6 @@ const FriendRequests: NextPage = () => {
     return (
         <div className="w-full flex items-center justify-center">
             <div className="flex flex-nowrap flex-col md:w-3/4 w-full md:mx-0 mx-4 h-[85vh] justify-center overflow-y-scroll">
-                <div className="text-center text-3xl font-bold">
-                    친구 요청 목록
-                </div>
-
                 <div className="flex justify-end space-x-5 w-full">
                     <button
                         type="button"
@@ -164,12 +158,7 @@ const FriendRequests: NextPage = () => {
                 <div className="flex justify-center mt-3 space-x-5">
                     <button
                         type="button"
-                        onClick={() =>
-                            onClickOffsetChange(
-                                -1,
-                                friendRequests as Page<FriendRequest>
-                            )
-                        }
+                        onClick={() => {}}
                         className="py-1 px-2.5 text-3xl font-bold border-2 border-gray-800 text-gray-800 bg-white"
                     >
                         {`<`}
@@ -182,12 +171,7 @@ const FriendRequests: NextPage = () => {
                     </div>
                     <button
                         type="button"
-                        onClick={() =>
-                            onClickOffsetChange(
-                                1,
-                                friendRequests as Page<FriendRequest>
-                            )
-                        }
+                        onClick={() => {}}
                         className="py-1 px-2.5 text-3xl font-bold border-2 border-gray-800 text-gray-800 bg-white"
                     >
                         {`>`}
