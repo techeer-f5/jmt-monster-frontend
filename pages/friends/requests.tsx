@@ -25,7 +25,7 @@ const FriendRequests: NextPage = () => {
      *
      * @returns Paginated friend requests to currently logged in user
      */
-    const fetchFriendRequests = async () => {
+    const fetchFriendRequests: () => Promise<void> = async () => {
         const { backend } = await fetchRemotes();
         const url = `${backend}/api/v1/friend-requests?`;
 
@@ -59,10 +59,6 @@ const FriendRequests: NextPage = () => {
         changeTitle('친구 요청 관리');
         changeLocation('');
 
-        (async () => {
-            await fetchFriendRequests();
-        })();
-
         if (!user) {
             setSnackbarMessage(
                 'error',
@@ -70,6 +66,10 @@ const FriendRequests: NextPage = () => {
             );
             router.push('/');
         }
+
+        (async () => {
+            await fetchFriendRequests();
+        })();
     }, [user, page]);
 
     return (
@@ -79,13 +79,9 @@ const FriendRequests: NextPage = () => {
                     <button
                         type="button"
                         onClick={() => {
-                            router.push(
-                                '/friends/management',
-                                'friends-management',
-                                {
-                                    shallow: true
-                                }
-                            );
+                            router.push('/friends/management', 'management', {
+                                shallow: true
+                            });
                         }}
                         className="mb-1 py-1 px-2.5 text-lg font-bold border-2 border-gray-800 text-gray-800 bg-white"
                     >
@@ -99,6 +95,7 @@ const FriendRequests: NextPage = () => {
                             <FriendRequestItem
                                 key={friendRequest.id}
                                 friendRequest={friendRequest}
+                                fetchFriendRequests={fetchFriendRequests}
                             />
                         )
                     )}

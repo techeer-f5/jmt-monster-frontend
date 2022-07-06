@@ -2,9 +2,11 @@ import { FriendRequest } from '../types/jmtapi';
 import { fetchRemotes } from '../utils/remotes';
 
 const FriendRequestItem = ({
-    friendRequest
+    friendRequest,
+    fetchFriendRequests
 }: {
     friendRequest: FriendRequest;
+    fetchFriendRequests: () => Promise<void>;
 }) => {
     const acceptFriendRequest = async () => {
         const { backend } = await fetchRemotes();
@@ -26,6 +28,8 @@ const FriendRequestItem = ({
         e.preventDefault();
         (async () => {
             await acceptFriendRequest();
+
+            fetchFriendRequests();
         })();
     };
 
@@ -47,6 +51,8 @@ const FriendRequestItem = ({
         e.preventDefault();
         (async () => {
             await deleteFriendRequest();
+
+            fetchFriendRequests();
         })();
     };
 

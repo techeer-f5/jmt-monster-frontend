@@ -64,10 +64,6 @@ const Management: NextPage = () => {
         changeTitle('친구 관리');
         changeLocation('');
 
-        (async () => {
-            await fetchFriends();
-        })();
-
         if (!user) {
             setSnackbarMessage(
                 'error',
@@ -75,6 +71,10 @@ const Management: NextPage = () => {
             );
             router.push('/');
         }
+
+        (async () => {
+            await fetchFriends();
+        })();
     }, [user, page]);
 
     return (
@@ -90,13 +90,9 @@ const Management: NextPage = () => {
                     <button
                         type="button"
                         onClick={() => {
-                            router.push(
-                                '/friends/requests',
-                                'friend-requests',
-                                {
-                                    shallow: true
-                                }
-                            );
+                            router.push('/friends/requests', 'requests', {
+                                shallow: true
+                            });
                         }}
                         className="mb-1 py-1 px-2.5 text-lg font-bold border-2 border-gray-800 text-gray-800 bg-white"
                     >
