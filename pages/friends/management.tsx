@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import qs from 'qs';
+import { Pagination } from '@mui/material';
 
 import useMapHeader from '../../store/map-header';
 import useAuth from '../../store/auth';
@@ -17,7 +18,7 @@ const Management: NextPage = () => {
     const { setMessage: setSnackbarMessage } = useSnackbarHandler();
     const { changeTitle, changeLocation } = useMapHeader();
     const [friends, setFriends] = useState<Page<Friend> | null>(null);
-    const [page, setPage] = useState<number>(0);
+    const [page, setPage] = useState<number>(1);
     const [size] = useState<number>(5);
 
     const [openAddFriendModal, setOpenAddFriendModal] =
@@ -39,9 +40,11 @@ const Management: NextPage = () => {
         const url = `${backend}/api/v1/friends?`;
         const params = qs.stringify({
             'from-user-id': user?.id,
-            offset: page,
+            page: page - 1,
             size
         });
+        console.log(params);
+        console.log('page', page);
 
         const res = await fetch(url + params, {
             method: 'GET',
@@ -56,7 +59,7 @@ const Management: NextPage = () => {
         }
 
         const result = (await res.json()) as Page<Friend>;
-        console.log(result);
+        console.log('yo', result);
         setFriends(result);
     };
 
@@ -108,32 +111,30 @@ const Management: NextPage = () => {
                 </div>
 
                 <div className="flex flex-col">
-                    {friends?.content?.map((friend: Friend) => (
-                        <FriendItem key={friend.id} friend={friend} />
-                    ))}
+                    {friends && friends?.totalElements > 0 ? (
+                        friends?.content?.map((friend: Friend) => (
+                            <FriendItem key={friend.id} friend={friend} />
+                        ))
+                    ) : (
+                        <div className="text-center my-5 text-xl font-bold">
+                            친구 목록이 비었습니다.
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex justify-center mt-3 space-x-5">
-                    <button
-                        type="button"
-                        onClick={() => {}}
-                        className="py-1 px-2.5 text-3xl font-bold border-2 border-gray-800 text-gray-800 bg-white"
-                    >
-                        {`<`}
-                    </button>
-                    <div
-                        className="py-1 px-2.5 text-3xl font-bold border-2
-                        border-gray-800 text-gray-800 bg-white"
-                    >
-                        {friends?.pageable.pageNumber ?? 0 + 1}
-                    </div>
-                    <button
-                        type="button"
-                        onClick={() => {}}
-                        className="py-1 px-2.5 text-3xl font-bold border-2 border-gray-800 text-gray-800 bg-white"
-                    >
-                        {`>`}
-                    </button>
+                    {friends && (
+                        <Pagination
+                            count={friends.totalPages}
+                            defaultPage={1}
+                            size="large"
+                            shape="rounded"
+                            page={page}
+                            onChange={(e, newPage) => {
+                                setPage(newPage);
+                            }}
+                        />
+                    )}
                 </div>
             </div>
         </div>

@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import qs from 'qs';
+import { Pagination } from '@mui/material';
 
 import useMapHeader from '../../store/map-header';
 import useAuth from '../../store/auth';
@@ -17,7 +18,7 @@ const FriendRequests: NextPage = () => {
     const { changeTitle, changeLocation } = useMapHeader();
     const [friendRequests, setFriendRequests] =
         useState<Page<FriendRequest> | null>(null);
-    const [page, setPage] = useState<number>(0);
+    const [page, setPage] = useState<number>(1);
     const [size] = useState<number>(5);
 
     /**
@@ -34,7 +35,7 @@ const FriendRequests: NextPage = () => {
         const params = qs.stringify({
             'to-user-id': user?.id,
             status: 'PENDING',
-            offset: page,
+            page: page - 1,
             size
         });
 
@@ -90,38 +91,36 @@ const FriendRequests: NextPage = () => {
                 </div>
 
                 <div className="flex flex-col">
-                    {friendRequests?.content?.map(
-                        (friendRequest: FriendRequest) => (
-                            <FriendRequestItem
-                                key={friendRequest.id}
-                                friendRequest={friendRequest}
-                                fetchFriendRequests={fetchFriendRequests}
-                            />
+                    {friendRequests && friendRequests?.totalElements > 0 ? (
+                        friendRequests?.content?.map(
+                            (friendRequest: FriendRequest) => (
+                                <FriendRequestItem
+                                    key={friendRequest.id}
+                                    friendRequest={friendRequest}
+                                    fetchFriendRequests={fetchFriendRequests}
+                                />
+                            )
                         )
+                    ) : (
+                        <div className="text-center my-5 text-xl font-bold">
+                            친구 요청 목록이 비었습니다.
+                        </div>
                     )}
                 </div>
 
                 <div className="flex justify-center mt-3 space-x-5">
-                    <button
-                        type="button"
-                        onClick={() => {}}
-                        className="py-1 px-2.5 text-3xl font-bold border-2 border-gray-800 text-gray-800 bg-white"
-                    >
-                        {`<`}
-                    </button>
-                    <div
-                        className="py-1 px-2.5 text-3xl font-bold border-2
-                        border-gray-800 text-gray-800 bg-white"
-                    >
-                        {friendRequests?.pageable.pageNumber ?? 0 + 1}
-                    </div>
-                    <button
-                        type="button"
-                        onClick={() => {}}
-                        className="py-1 px-2.5 text-3xl font-bold border-2 border-gray-800 text-gray-800 bg-white"
-                    >
-                        {`>`}
-                    </button>
+                    {friendRequests && (
+                        <Pagination
+                            count={friendRequests.totalPages}
+                            defaultPage={1}
+                            size="large"
+                            shape="rounded"
+                            page={page}
+                            onChange={(e, newPage) => {
+                                setPage(newPage);
+                            }}
+                        />
+                    )}
                 </div>
             </div>
         </div>
