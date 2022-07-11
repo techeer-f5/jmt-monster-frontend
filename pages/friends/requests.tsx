@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import qs from 'qs';
 import { Pagination } from '@mui/material';
 
@@ -8,43 +8,36 @@ import useMapHeader from '../../store/map-header';
 import useAuth from '../../store/auth';
 import useSnackbarHandler from '../../store/snackbar';
 import { fetchRemotes } from '../../utils/remotes';
-import { Friend, Page } from '../../types/jmtapi';
-import FriendRequestModal from '../../components/friend-request-modal';
-import FriendItem from '../../components/friend-item';
+import { FriendRequest, Page } from '../../types/jmtapi';
+import FriendRequestItem from '../../components/friend-request-item';
 
-const Management: NextPage = () => {
+const FriendRequests: NextPage = () => {
     const router = useRouter();
     const { user } = useAuth();
     const { setMessage: setSnackbarMessage } = useSnackbarHandler();
     const { changeTitle, changeLocation } = useMapHeader();
-    const [friends, setFriends] = useState<Page<Friend> | null>(null);
+    const [friendRequests, setFriendRequests] =
+        useState<Page<FriendRequest> | null>(null);
     const [page, setPage] = useState<number>(1);
     const [size] = useState<number>(5);
 
-    const [openAddFriendModal, setOpenAddFriendModal] =
-        useState<boolean>(false);
-    const onClickAddFriendButton = () => {
-        setOpenAddFriendModal(true);
-    };
-    const onClickAddFriendModalCloseButton = () => {
-        setOpenAddFriendModal(false);
-    };
-
     /**
-     * Fetches friends of the logged in user from API
+     * Fetches friend requests to the logged in user from API
      *
-     * @returns Paginated friends of currently logged in user
+     * @returns Paginated friend requests to currently logged in user
      */
-    const fetchFriends = async () => {
+    const fetchFriendRequests: () => Promise<void> = async () => {
         const { backend } = await fetchRemotes();
-        const url = `${backend}/api/v1/friends?`;
+        const url = `${backend}/api/v1/friend-requests?`;
+
+        console.log('fetching friend requests');
+        console.log(page);
         const params = qs.stringify({
-            'from-user-id': user?.id,
+            'to-user-id': user?.id,
+            status: 'PENDING',
             page: page - 1,
             size
         });
-        console.log(params);
-        console.log('page', page);
 
         const res = await fetch(url + params, {
             method: 'GET',
@@ -58,13 +51,13 @@ const Management: NextPage = () => {
             return;
         }
 
-        const result = (await res.json()) as Page<Friend>;
-        console.log('yo', result);
-        setFriends(result);
+        const result = (await res.json()) as Page<FriendRequest>;
+        console.log(result);
+        setFriendRequests(result);
     };
 
     useEffect(() => {
-        changeTitle('친구 관리');
+        changeTitle('친구 요청 관리');
         changeLocation('');
 
         if (!user) {
@@ -76,56 +69,49 @@ const Management: NextPage = () => {
         }
 
         (async () => {
-            await fetchFriends();
+            await fetchFriendRequests();
         })();
     }, [user, page]);
 
     return (
         <div className="w-full flex items-center justify-center">
-            {openAddFriendModal && (
-                <FriendRequestModal
-                    onClickCloseButton={onClickAddFriendModalCloseButton}
-                />
-            )}
-
             <div className="flex flex-nowrap flex-col md:w-3/4 w-full md:mx-0 mx-4 h-[85vh] justify-center overflow-y-scroll">
                 <div className="flex justify-end space-x-5 w-full">
                     <button
                         type="button"
                         onClick={() => {
-                            router.push('/friends/requests', 'requests', {
+                            router.push('/friends/management', 'management', {
                                 shallow: true
                             });
                         }}
                         className="mb-1 py-1 px-2.5 text-lg font-bold border-2 border-gray-800 text-gray-800 bg-white"
                     >
-                        친구 요청 목록 조회
-                    </button>
-                    <button
-                        type="button"
-                        onClick={onClickAddFriendButton}
-                        className="mb-1 py-1 px-2.5 text-3xl font-bold border-2 border-gray-800 text-gray-800 bg-white"
-                    >
-                        +
+                        친구 목록 조회
                     </button>
                 </div>
 
                 <div className="flex flex-col">
-                    {friends && friends?.totalElements > 0 ? (
-                        friends?.content?.map((friend: Friend) => (
-                            <FriendItem key={friend.id} friend={friend} />
-                        ))
+                    {friendRequests && friendRequests?.totalElements > 0 ? (
+                        friendRequests?.content?.map(
+                            (friendRequest: FriendRequest) => (
+                                <FriendRequestItem
+                                    key={friendRequest.id}
+                                    friendRequest={friendRequest}
+                                    fetchFriendRequests={fetchFriendRequests}
+                                />
+                            )
+                        )
                     ) : (
                         <div className="text-center my-5 text-xl font-bold">
-                            친구 목록이 비었습니다.
+                            친구 요청 목록이 비었습니다.
                         </div>
                     )}
                 </div>
 
                 <div className="flex justify-center mt-3 space-x-5">
-                    {friends && (
+                    {friendRequests && (
                         <Pagination
-                            count={friends.totalPages}
+                            count={friendRequests.totalPages}
                             defaultPage={1}
                             size="large"
                             shape="rounded"
@@ -141,4 +127,4 @@ const Management: NextPage = () => {
     );
 };
 
-export default Management;
+export default FriendRequests;
