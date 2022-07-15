@@ -1,9 +1,9 @@
 import type { NextPage } from 'next';
 import { useEffect } from 'react';
-import KakaoMap from '../../components/kakao-map';
-import useMapHeader from '../../store/map-header';
-import useCurrentLatLng from '../../store/current-latlng';
-import { jungLatLng } from '../../utils/sample-latlngs';
+import KakaoMap from '../../../components/kakao-map';
+import useMapHeader from '../../../store/map-header';
+import useCurrentLatLng from '../../../store/current-latlng';
+import { jungLatLng } from '../../../utils/sample-latlngs';
 
 const Friends: NextPage = () => {
     const { changeTitle, changeLocation } = useMapHeader();

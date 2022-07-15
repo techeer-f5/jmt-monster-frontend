@@ -23,11 +23,6 @@ export default function getRoutes(
             icon: 'Map'
         },
         {
-            uri: '/maps/friends',
-            name: '친구 지도',
-            icon: 'Map'
-        },
-        {
             uri: '/maps',
             name: '지도 목록',
             icon: 'ZoomInMap'

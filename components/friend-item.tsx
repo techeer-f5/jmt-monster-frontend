@@ -1,6 +1,15 @@
+import { useRouter } from 'next/router';
 import { Friend } from '../types/jmtapi';
 
 const FriendItem = ({ friend }: { friend: Friend }) => {
+    const router = useRouter();
+    const onClickHangOut = () => {
+        router.push({
+            pathname: '/maps/friends/[uid]',
+            query: { uid: friend.toUser.id }
+        });
+    };
+
     return (
         <div className="flex my-2 w-full items-center border-2 border-gray-800 text-gray-800 bg-white">
             <div className="w-20">
@@ -19,6 +28,7 @@ const FriendItem = ({ friend }: { friend: Friend }) => {
                     <button
                         type="button"
                         className="p-2 border-2 text-gray-800 border-gray-800 bg-green-100"
+                        onClick={onClickHangOut}
                     >
                         놀러가기
                     </button>
