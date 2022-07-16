@@ -160,9 +160,8 @@ const useAuth = create(
                             Authorization: `Bearer ${token}`
                         },
                         body: JSON.stringify({
-                            imageUrl: null,
                             name: extraUserInfos.addressName,
-                            code: extraUserInfos.addressName
+                            code: extraUserInfos.addressCode
                         })
                     });
 
