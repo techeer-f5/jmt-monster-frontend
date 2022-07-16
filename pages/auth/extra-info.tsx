@@ -6,10 +6,12 @@ import { handleAddressCompleteGenerator } from '../../components/login-modal';
 import useSnackbarHandler from '../../store/snackbar';
 import useAuth from '../../store/auth';
 import Mine from '../maps/mine';
+import { KakaoMapSingleton } from '../../utils/kakao';
 
 export interface ExtraUserInfos {
     nickname: string;
-    address: string;
+    addressName: string;
+    addressCode: string;
 }
 
 const ExtraInfo = ({
@@ -23,8 +25,11 @@ const ExtraInfo = ({
 
     const [extraUserInfos, setExtraUserInfos] = useState<ExtraUserInfos>({
         nickname: user?.nickname ?? '',
-        address: user?.address ?? ''
+        addressName: user?.address ?? '',
+        addressCode: ''
     });
+
+    const [tempAddressName, setTempAddressName] = useState('');
 
     const [daumPostCodeStatus, setDaumPostCodeStatus] = useState(false);
 
@@ -32,15 +37,58 @@ const ExtraInfo = ({
     const router = useRouter();
 
     useEffect(() => {
-        if (!user || (!edit && user && user.extraInfoInjected)) {
+        const addressName = tempAddressName;
+
+        if (!addressName) {
+            return;
+        }
+
+        const geocoder = new KakaoMapSingleton.maps.services.Geocoder();
+
+        geocoder.addressSearch(addressName, (result, status) => {
+            if (status !== 'OK' || result.length <= 0) {
+                return;
+            }
+
+            const address = result[0];
+
+            const { x, y } = address;
+
+            geocoder.coord2RegionCode(x, y, (result, status) => {
+                if (status !== 'OK' || result.length <= 0) {
+                    return;
+                }
+
+                const region = result[0];
+
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                const { address_name, code } = region;
+
+                setExtraUserInfos({
+                    ...extraUserInfos,
+                    addressName: address_name,
+                    addressCode: code
+                });
+            });
+        });
+    }, [tempAddressName]);
+
+    useEffect(() => {
+        if (
+            !user ||
+            (!edit &&
+                user &&
+                user.extraInfoInjected &&
+                extraUserInfos.addressName)
+        ) {
             router.push('/');
         }
-    }, []);
+    }, [edit, router, user, extraUserInfos.addressName]);
 
     const submit = async () => {
-        const { nickname, address } = extraUserInfos;
+        const { nickname, addressName, addressCode } = extraUserInfos;
 
-        if (!nickname || !address) {
+        if (!nickname || !addressName || !addressCode) {
             setSnackbarMessage(
                 'error',
                 '닉네임 혹은 주소가 입력되지 않았습니다.'
@@ -83,10 +131,7 @@ const ExtraInfo = ({
     const onHandleAddressComplete = handleAddressCompleteGenerator(
         (address) => {
             setDaumPostCodeStatus(false);
-            setExtraUserInfos({
-                ...extraUserInfos,
-                address
-            });
+            setTempAddressName(address);
         }
     );
 
@@ -147,7 +192,7 @@ const ExtraInfo = ({
                                 variant="standard"
                                 autoComplete="off"
                                 onClick={openDaumPostCode}
-                                value={extraUserInfos.address}
+                                value={extraUserInfos.addressName}
                                 disabled
                             />
                             {daumPostCodeStatus && (

@@ -46,6 +46,11 @@ export interface UserInfo {
     user?: User;
 }
 
+export interface HomeResponse {
+    name: string;
+    code: string;
+}
+
 const useAuth = create(
     devtools(
         persist<AuthState>(
@@ -129,7 +134,7 @@ const useAuth = create(
                         return false;
                     }
 
-                    const res = await fetch(`${backend}/users/me/extra-info`, {
+                    let res = await fetch(`${backend}/users/me/extra-info`, {
                         method: edit ? 'PUT' : 'POST',
                         headers: {
                             Accept: 'application/json',
@@ -137,8 +142,7 @@ const useAuth = create(
                             Authorization: `Bearer ${token}`
                         },
                         body: JSON.stringify({
-                            imageUrl: null,
-                            ...extraUserInfos
+                            nickname: extraUserInfos.nickname
                         })
                     });
 
@@ -147,6 +151,30 @@ const useAuth = create(
                     if (result.isSuccess && result.user) {
                         set({ user: result.user });
                     }
+
+                    res = await fetch(`${backend}/api/v1/home`, {
+                        method: 'PUT',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-type': 'application/json',
+                            Authorization: `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            imageUrl: null,
+                            name: extraUserInfos.addressName,
+                            code: extraUserInfos.addressName
+                        })
+                    });
+
+                    const user = result?.user ?? null;
+
+                    if (user) {
+                        user.address = extraUserInfos.addressName;
+                    }
+
+                    set({
+                        user
+                    });
 
                     return result.isSuccess;
                 },
@@ -178,6 +206,21 @@ const useAuth = create(
                     const { user } = userResponse;
 
                     isSuccess = isSuccess && !!user;
+
+                    const homeResponse = await fetch(`${backend}/api/v1/home`, {
+                        method: 'GET',
+                        headers: {
+                            Accept: 'application/json',
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+
+                    const homeData =
+                        (await homeResponse.json()) as HomeResponse;
+
+                    if (homeData.name && user) {
+                        user.address = homeData.name ?? null;
+                    }
 
                     // Typescript does not remove undefined type by writing above statement automatically..
                     if (isSuccess && user) {
