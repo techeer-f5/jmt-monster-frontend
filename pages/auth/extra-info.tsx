@@ -123,7 +123,7 @@ const ExtraInfo = ({
                         <div className="text-3xl font-bold text-indigo-700 text-center mb-10">
                             {`사용자 정보 ${edit ? '수정' : '입력'}`}
                         </div>
-                        <div className="flex flex-col mb-5 space-y-4">
+                        <div className="flex flex-col mb-5 space-y-4 mx-2">
                             <TextField
                                 className="mx-auto w-[75%]"
                                 id="nickname"
