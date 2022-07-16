@@ -30,8 +30,6 @@ const FriendRequests: NextPage = () => {
         const { backend } = await fetchRemotes();
         const url = `${backend}/api/v1/friend-requests?`;
 
-        console.log('fetching friend requests');
-        console.log(page);
         const params = qs.stringify({
             'to-user-id': user?.id,
             status: 'PENDING',
@@ -52,7 +50,6 @@ const FriendRequests: NextPage = () => {
         }
 
         const result = (await res.json()) as Page<FriendRequest>;
-        console.log(result);
         setFriendRequests(result);
     };
 

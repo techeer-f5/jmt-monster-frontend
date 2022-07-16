@@ -43,8 +43,6 @@ const Management: NextPage = () => {
             page: page - 1,
             size
         });
-        console.log(params);
-        console.log('page', page);
 
         const res = await fetch(url + params, {
             method: 'GET',
@@ -59,7 +57,6 @@ const Management: NextPage = () => {
         }
 
         const result = (await res.json()) as Page<Friend>;
-        console.log('yo', result);
         setFriends(result);
     };
 
