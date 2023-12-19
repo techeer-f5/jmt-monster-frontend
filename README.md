@@ -8,7 +8,7 @@
 
 ## ⚙️ 기술 문서
 
-- [기획 및 기술 선정 Notion 페이지](https://www.notion.so/techeer/acc30a106a0444629e1868dfab11a92c)
+- [기획 및 기술 선정 Notion 페이지](https://techeer.notion.site/acc30a106a0444629e1868dfab11a92c)
 - [Figma UI 디자인 페이지](https://www.figma.com/file/yVVsXwdnC2YO5CGBB4WmrI/%EB%A7%9B%EC%A7%91-%EB%AA%AC%EC%8A%A4%ED%84%B0-UI-%EB%94%94%EC%9E%90%EC%9D%B8?node-id=4213%3A1335)
 
 ## **🌎 Production Server**
